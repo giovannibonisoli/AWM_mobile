@@ -5,13 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './src/pages/HomeScreen';
-
+import LoginScreen from './src/pages/LoginScreen';
 
 const Stack = createStackNavigator();
-
-const ProfileScreen = () => {
-  return <Text>This is Jane's profile</Text>;
-};
 
 class App extends React.Component {
   render(){
@@ -19,11 +15,24 @@ class App extends React.Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              title: 'Login',
+              /*headerStyle: {
+                backgroundColor: '#f4511e',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+            }*/}}
+          />
+          <Stack.Screen
             name="Home"
             component={HomeScreen}
             options={{ title: 'Welcome' }}
           />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
+
         </Stack.Navigator>
       </NavigationContainer>
     );
