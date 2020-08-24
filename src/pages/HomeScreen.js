@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert } from 'react-native';
 
 import { request } from '../helpers/requests';
+import AuthService from '../services/auth.service';
 
 class HomeScreen extends React.Component {
   getBarrels = async () => {
@@ -14,7 +15,12 @@ class HomeScreen extends React.Component {
         <Text>Hello {this.props.route.params.name}</Text>
         <Button
           onPress={this.getBarrels}
-          title="Learn More"
+          title="Get data"
+          color="#841584"
+          accessibilityLabel="Learn more about this purple button"/>
+        <Button
+          onPress={() => AuthService.logout()}
+          title="Logout"
           color="#841584"
           accessibilityLabel="Learn more about this purple button"/>
       </View>

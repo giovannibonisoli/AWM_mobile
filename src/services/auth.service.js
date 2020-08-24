@@ -36,8 +36,13 @@ class AuthService {
   }
 }
 
-  logout = () => {
-    AsyncStorage.removeItem('user');
+  logout = async () => {
+    try {
+      await AsyncStorage.removeItem('user');
+    }
+    catch(e) {
+      console.error(e);
+    }
   }
 
   isLoggedIn = async () => {
