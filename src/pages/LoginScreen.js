@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 import AuthService from '../services/auth.service';
 
@@ -30,7 +31,7 @@ class LoginScreen extends React.Component {
     else{
       const res = await AuthService.login(this.state.username, this.state.password);
       if (res === "login successful"){
-        this.props.navigation.navigate('Home', { name: this.state.username });
+        this.props.navigation.navigate('Drawer', { name: this.state.username });
       }
       else{
         this.alertError("Login Fallito", "Non risulta nessun utente con queste credenziali");
