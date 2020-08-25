@@ -8,6 +8,7 @@ import { StatusBar } from 'react-native';
 import HomeScreen from './src/pages/HomeScreen';
 import LoginScreen from './src/pages/LoginScreen';
 import BarrelSetScreen from './src/pages/BarrelSetScreen';
+import Sidebar from './src/components/Sidebar';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -15,7 +16,7 @@ const Drawer = createDrawerNavigator();
 class DrawerNavigator extends React.Component {
   render(){
     return (
-      <Drawer.Navigator>
+      <Drawer.Navigator drawerContent={props => <Sidebar {...props}/>}>
         <Drawer.Screen
           name="Home"
           component={HomeScreen}
