@@ -3,9 +3,10 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react
 import { Ionicons } from '@expo/vector-icons';
 
 const Item = ({ item, navigate }) => {
+
   return (
     <TouchableOpacity style={styles.listItem} onPress={()=>navigate(item.field)}>
-      <Ionicons name={item.icon} size={32} />
+      <Image source={item.icon} style={{width: '10%', height: '56%'}}/>
       <Text style={styles.title}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -17,14 +18,13 @@ class Sidebar extends React.Component {
     return (
       <View>
         <View style={{alignItems: 'center'}}>
-          <Image style={styles.profileImg}/>
-          <Text style={{fontWeight:"bold", fontSize:16, marginTop: 10}}>{this.props.username}</Text>
-          <Text style={{color:"gray", marginBottom:10 }}>janna@doe.com</Text>
+          <Image source={require("../static/user.png")} style={styles.profileImg}/>
+          <Text style={{fontWeight:"bold", fontSize: 16, marginTop: 10}}>{this.props.username}</Text>
         </View>
         <View style={styles.sidebarDivider}></View>
 
         <FlatList
-          style={{width:"100%",marginLeft:30}}
+          style={{width:"100%", marginLeft:30}}
           data={this.props.routes}
           renderItem={({ item }) => <Item item={item} navigate={this.props.navigation.navigate}/>}
           keyExtractor={item => item.field}
@@ -39,10 +39,7 @@ const styles = {
   profileImg: {
     width: 80,
     height: 80,
-    borderRadius: 40,
     marginTop: 20,
-    borderColor: "#20232a",
-    borderWidth: 1,
   },
 
   sidebarDivider:{

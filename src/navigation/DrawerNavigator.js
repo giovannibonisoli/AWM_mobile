@@ -11,9 +11,9 @@ class DrawerNavigator extends React.Component {
     routes:[
         {
             field: "barrelSet",
-            name: "Batterie",
+            name: "Batterie e Barili",
             component: BarrelSetScreen,
-            icon:"ios-home"
+            icon: require("../static/barrel.png")
         }
     ]
   }
