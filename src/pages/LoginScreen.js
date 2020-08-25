@@ -31,7 +31,7 @@ class LoginScreen extends React.Component {
     else{
       const res = await AuthService.login(this.state.username, this.state.password);
       if (res === "login successful"){
-        this.props.navigation.navigate('Drawer', { name: this.state.username });
+        this.props.navigation.navigate('Drawer', { username: this.state.username });
       }
       else{
         this.alertError("Login Fallito", "Non risulta nessun utente con queste credenziali");

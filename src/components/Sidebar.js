@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const Item = ({ item, navigate }) => {
   return (
-    <TouchableOpacity style={styles.listItem} onPress={()=>navigate(item.name)}>
+    <TouchableOpacity style={styles.listItem} onPress={()=>navigate(item.field)}>
       <Ionicons name={item.icon} size={32} />
       <Text style={styles.title}>{item.name}</Text>
     </TouchableOpacity>
@@ -12,39 +12,22 @@ const Item = ({ item, navigate }) => {
 }
 
 class Sidebar extends React.Component {
-  state = {
-      routes:[
-          {
-              name:"Home",
-              icon:"ios-home"
-          },
-          {
-              name:"Profile",
-              icon:"ios-contact"
-          },
-          {
-              name:"Settings",
-              icon:"ios-settings"
-          },
-      ]
-  }
-
 
   render () {
     return (
       <View>
         <View style={{alignItems: 'center'}}>
           <Image style={styles.profileImg}/>
-          <Text style={{fontWeight:"bold", fontSize:16, marginTop: 10}}>Janna Doe</Text>
+          <Text style={{fontWeight:"bold", fontSize:16, marginTop: 10}}>{this.props.username}</Text>
           <Text style={{color:"gray", marginBottom:10 }}>janna@doe.com</Text>
         </View>
         <View style={styles.sidebarDivider}></View>
 
         <FlatList
           style={{width:"100%",marginLeft:30}}
-          data={this.state.routes}
-          renderItem={({ item }) => <Item  item={item} navigate={this.props.navigation.navigate}/>}
-          keyExtractor={item => item.name}
+          data={this.props.routes}
+          renderItem={({ item }) => <Item item={item} navigate={this.props.navigation.navigate}/>}
+          keyExtractor={item => item.field}
         />
       </View>
 

@@ -10,8 +10,8 @@ class DrawerNavigator extends React.Component {
   state = {
     routes:[
         {
-            name:"barrelSet",
-            title: "Batterie",
+            field: "barrelSet",
+            name: "Batterie",
             component: BarrelSetScreen,
             icon:"ios-home"
         }
@@ -19,10 +19,12 @@ class DrawerNavigator extends React.Component {
   }
   render(){
     return (
-      <Drawer.Navigator drawerContent={props => <Sidebar {...props} routes={this.state.routes}/>}>
-        {this.state.routes.map(route => (
+      <Drawer.Navigator drawerContent={props => <Sidebar {...props} username={this.props.route.params.username}
+                                                                    routes={this.state.routes}/>}>
+        {this.state.routes.map((route, i) => (
           <Drawer.Screen
-            name={route.name}
+            key={i}
+            name={route.field}
             component={route.component}
             options={{
               title: route.title
