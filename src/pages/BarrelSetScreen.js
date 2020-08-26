@@ -7,7 +7,22 @@ import { request } from '../helpers/requests';
 
 class BarrelSetScreen extends React.Component {
   state = {
-    items: []
+    items: [],
+    fields: [
+              {
+                field: 'id',
+                name: 'Numero Batteria',
+                type: 'number',
+                modifiable: false
+              },
+              {
+                field: 'year',
+                name: 'Anno',
+                type: 'number',
+                min: 1984,
+                modifiable: true
+              }
+            ]
   }
 
   async componentDidMount() {
@@ -18,7 +33,8 @@ class BarrelSetScreen extends React.Component {
     return (
       <View style={{width: '100%', height: '100%'}}>
         <Header name="Batterie" openDrawer={this.props.navigation.openDrawer}/>
-        <DataList items={this.state.items} />
+        <DataList items={this.state.items}
+                  fields={this.state.fields}/>
       </View>
     );
   }

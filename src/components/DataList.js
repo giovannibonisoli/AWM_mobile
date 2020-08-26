@@ -6,39 +6,47 @@ import { request } from '../helpers/requests';
 
 class Item extends React.Component {
 
-
   render() {
     return (
-      <View style={styles.item}>
-        <Text style={{color:'white'}}>{this.props.item.id}</Text>
-        <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-          <TouchableOpacity onPress={() => alert(`edit ${JSON.stringify(this.props.item)}`)}>
-            <AntDesign name="right" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => alert(`go in details ${JSON.stringify(this.props.item)}`)}>
-            <Feather name="edit" size={24} color="white" />
+      <View>
+        <TouchableOpacity style={styles.tableRow} onPress={() => alert(`go in details ${JSON.stringify(this.props.item)}`)}>
+          {this.props.fields.map((field, i) => (
+            <Text key={i} style={{color: 'black', width: this.props.tdSpace, padding: 20}}>
+                {this.props.item[field.field]}
+            </Text>
+          ))}
 
+          {/*<TouchableOpacity onPress={() => alert(`edit ${JSON.stringify(this.props.item)}`)}>
+            <Feather name="edit" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert(`delete ${JSON.stringify(this.props.item)}`)}>
-            <AntDesign name="close" size={24} color="white" />
+          <TouchableOpacity style={{width: '5%'}} onPress={() => alert(`delete ${JSON.stringify(this.props.item)}`)}>
+            <AntDesign name="close" size={24} color="black" />
           </TouchableOpacity>
-        </View>
+          <TouchableOpacity style={{width: '5%'}} onPress={() => alert(`go in details ${JSON.stringify(this.props.item)}`)}>
+            <AntDesign name="right" size={24} color="black" />
+          </TouchableOpacity>*/}
+        </TouchableOpacity>
+        <View style={styles.rowDivider}></View>
       </View>
     )
   }
 }
 
-
 class DataList extends React.Component {
 
   render() {
+    const tdSpace = `${Math.floor(100 / this.props.fields.length)}%`;
     return (
       <View style={styles.container}>
+        <View style={styles.tableRow}>
+          {this.props.fields.map((field, i) => (
+            <Text key={i} style={{fontWeight:"bold", color: 'black', width: tdSpace, padding: 20}}>{field.name}</Text>
+          ))}
+        </View>
+        <View style={styles.rowDivider}></View>
         <FlatList
           data={this.props.items}
-          renderItem={({ item }) => <Item item={item}/> }
+          renderItem={({ item }) => <Item item={item} fields={this.props.fields} tdSpace={tdSpace}/> }
           keyExtractor={item => item.id}
         />
         <TouchableOpacity onPress={() => alert('FAB clicked')} style={styles.fab}>
@@ -52,16 +60,21 @@ class DataList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    padding:10
   },
 
-  item: {
-    elevation: 8,
-    //borderRadius: 15,
-    justifyContent: 'flex-end',
-    backgroundColor: '#575FCF',
-    padding: 20,
-    //marginBottom: 15
+  tableRow: {
+    width:"100%",
+    height: 60,
+    backgroundColor: '#fff',
+    flexDirection:"row",
+    alignItems:"center"
+  },
+
+  rowDivider:{
+    height: 1,
+    width: "100%",
+    backgroundColor: "#DCDCDC"
   },
 
   fab: {
