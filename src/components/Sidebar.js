@@ -5,9 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 const Item = ({ item, navigate }) => {
 
   return (
-    <TouchableOpacity style={styles.listItem} onPress={()=>navigate(item.field)}>
+    <TouchableOpacity style={styles.listItem} onPress={()=>navigate(item.name)}>
       <Image source={item.icon} style={{width: '10%', height: '56%'}}/>
-      <Text style={styles.title}>{item.name}</Text>
+      <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
   );
 }
@@ -27,7 +27,7 @@ class Sidebar extends React.Component {
           style={{width:"100%", marginLeft:30}}
           data={this.props.routes}
           renderItem={({ item }) => <Item item={item} navigate={this.props.navigation.navigate}/>}
-          keyExtractor={item => item.field}
+          keyExtractor={item => item.name}
         />
       </View>
 

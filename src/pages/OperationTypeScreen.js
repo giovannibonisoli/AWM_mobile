@@ -1,0 +1,43 @@
+import React from 'react';
+import { StyleSheet, Button, View } from 'react-native';
+
+import Header from '../components/Header';
+import DataList from '../components/DataList';
+import { request } from '../helpers/requests';
+
+class OperationTypeScreen extends React.Component {
+  state = {
+    items: [],
+    fields: [
+              {
+                field: 'name',
+                name: 'Nome',
+                type: 'text',
+                modifiable: false
+              },
+              {
+                field: 'description',
+                name: 'Descrizione',
+                type: 'textArea',
+                modifiable: false
+              }
+            ]
+  }
+
+  async componentDidMount() {
+    this.setState({items: await request("operation_type/", 'GET')});
+  }
+
+  render () {
+    return (
+      <View style={{width: '100%', height: '100%'}}>
+        <Header name="Tipi di Operazione" openDrawer={this.props.navigation.openDrawer}/>
+        <DataList items={this.state.items}
+                  fields={this.state.fields}/>
+      </View>
+    );
+  }
+};
+
+
+export default OperationTypeScreen;
