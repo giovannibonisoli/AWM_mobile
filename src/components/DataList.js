@@ -12,12 +12,12 @@ class DataList extends React.Component {
 
     if(action === 'add'){
       params.item = undefined;
-      params.title = `Aggiungi Batteria`;
+      params.title = `Aggiungi ${this.props.objectName}`;
       params.action = this.props.addAction.bind(this);
     }
     else{
       params.item = item;
-      params.title = `Modifica Batteria`;
+      params.title = `Modifica ${this.props.objectName}`;
       params.action = this.props.updateDeleteAction.bind(this);
       params.item = item;
       params.details = this.props.details;
@@ -49,7 +49,7 @@ class DataList extends React.Component {
               <View style={styles.rowDivider}></View>
             </View>
           )}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item.id}
         />
         <TouchableOpacity onPress={() => this.goToDetail('add')} style={styles.fab}>
           <Text style={styles.fabIcon}>+</Text>

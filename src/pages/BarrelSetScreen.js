@@ -33,7 +33,7 @@ class BarrelSetScreen extends React.Component {
   }
 
   updateDeleteItem = async (item, action) => {
-
+    console.log('elimina: ', item)
     if(action === 'PUT'){
       let updatedItem = await request (`barrel_set/${item.id}/`, 'PUT', item);
 
@@ -63,7 +63,8 @@ class BarrelSetScreen extends React.Component {
     return (
       <View style={{width: '100%', height: '100%'}}>
         <Header name="Batterie" openDrawer={this.props.navigation.openDrawer}/>
-        <DataList items={this.state.items}
+        <DataList objectName="Batteria"
+                  items={this.state.items}
                   fields={this.state.fields}
                   navigate={this.props.navigation.navigate}
                   addAction={this.addItem}

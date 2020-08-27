@@ -13,22 +13,53 @@ class BarrelScreen extends React.Component {
               {
                 field: 'id',
                 name: 'Codice Barile',
-                type: '',
+                type: 'default',
                 modifiable: false
               },
               {
                 field: 'wood_type',
                 name: 'Legno',
-                type: '',
+                type: 'default',
                 modifiable: true
               },
               {
                 field: 'capability',
                 name: 'Capacità (litri)',
-                type: 'number',
+                type: 'numeric',
                 modifiable: true
               }
             ]
+  }
+
+  addItem = async (item, action) => {
+    item.barrel_set = this.props.route.params.setID;
+    let newItem = await request ("barrel/", 'POST', item);
+    this.setState(prevState => ({
+      items: [...prevState.items, newItem]
+    }));
+  }
+
+  updateDeleteItem = async (item, action) => {
+
+    if(action === 'PUT'){
+      let updatedItem = await request (`barrel/${item.id}/`, 'PUT', item);
+
+      const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+      const newArray = [
+        // destructure all items from beginning to the indexed item
+        ...this.state.items.slice(0, itemIndex),
+        // add the updated item to the array
+        updatedItem,
+        // add the rest of the items to the array from the index after the replaced item
+        ...this.state.items.slice(itemIndex + 1)
+      ]
+      this.setState({ items: newArray });
+    }
+    else{
+      await request (`barrel/${item.id}/`, 'DELETE');
+      const updatedItems = this.state.items.filter(el => el.id !== item.id);
+      this.setState({ items: updatedItems });
+    }
   }
 
   async componentDidUpdate(prevProps){
@@ -44,10 +75,14 @@ class BarrelScreen extends React.Component {
   render () {
     return (
       <View style={{width: '100%', height: '100%'}}>
-        <Header name="Barili" openDrawer={this.props.navigation.openDrawer}/>
-        <DataList items={this.state.items}
+        <Header name={`Batteria ${this.props.route.params.setID}`} openDrawer={this.props.navigation.openDrawer}/>
+        <DataList objectName="Barile"
+                  items={this.state.items}
                   fields={this.state.fields}
-                  navigate={this.props.navigation.navigate}/>
+                  navigate={this.props.navigation.navigate}
+                  addAction={this.addItem}
+                  updateDeleteAction={this.updateDeleteItem}
+                  />
       </View>
     );
   }
