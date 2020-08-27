@@ -13,13 +13,13 @@ class OperationTypeScreen extends React.Component {
                 field: 'name',
                 name: 'Nome',
                 type: 'text',
-                modifiable: false
+                modifiable: true
               },
               {
                 field: 'description',
                 name: 'Descrizione',
                 type: 'textArea',
-                modifiable: false
+                modifiable: true
               }
             ]
   }
@@ -33,7 +33,8 @@ class OperationTypeScreen extends React.Component {
       <View style={{width: '100%', height: '100%'}}>
         <Header name="Tipi di Operazione" openDrawer={this.props.navigation.openDrawer}/>
         <DataList items={this.state.items}
-                  fields={this.state.fields}/>
+                  fields={this.state.fields}
+                  navigate={this.props.navigation.navigate}/>
       </View>
     );
   }

@@ -36,10 +36,7 @@ class LoginScreen extends React.Component {
       else{
         this.alertError("Login Fallito", "Non risulta nessun utente con queste credenziali");
       }
-
     }
-
-
   }
 
   render () {
@@ -52,7 +49,6 @@ class LoginScreen extends React.Component {
              placeholder="Nome Utente"
              placeholderTextColor="#003f5c"
              onChangeText={text => this.onChangeTextHandler("username", text)}
-             value={this.state.username}
            />
         </View>
         <View style={styles.inputView} >
@@ -62,7 +58,6 @@ class LoginScreen extends React.Component {
               placeholder="Password"
               placeholderTextColor="#003f5c"
               onChangeText={text => this.onChangeTextHandler("password", text)}
-              value={this.state.password}
             />
         </View>
 
@@ -83,7 +78,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
 
   inputView:  {
     width:"80%",
@@ -107,6 +101,7 @@ const styles = StyleSheet.create({
     height:50,
     color:"#000"
  },
+
   loginText: {
     color: "white"
   },

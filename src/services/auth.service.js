@@ -66,6 +66,7 @@ class AuthService {
   checkToken = async () => {
     const user = await this.getCurrentUser();
     console.log('get user to check token', user);
+    console.log('get refresh', user.token.refresh)
 
     const startDate = Date.parse(user.date);
     const endDate = new Date();

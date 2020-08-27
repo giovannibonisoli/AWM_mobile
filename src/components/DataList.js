@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { AntDesign, Feather } from '@expo/vector-icons';
 
 import { request } from '../helpers/requests';
 
@@ -21,7 +20,11 @@ class DataList extends React.Component {
           renderItem={({ item }) => (
             <View>
               <TouchableOpacity style={styles.tableRow} onPress={() => {
-                this.props.navigate('detail');
+                this.props.navigate('detail', {
+                                                fields: this.props.fields,
+                                                item: item,
+                                                title: "Batteria"
+                                              });
               }}>
                 {this.props.fields.map((field, i) => (
                   <Text key={i} style={{color: 'black', width: tdSpace, padding: 20}}>
@@ -32,7 +35,7 @@ class DataList extends React.Component {
               <View style={styles.rowDivider}></View>
             </View>
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
         />
         <TouchableOpacity onPress={() => alert('FAB clicked')} style={styles.fab}>
           <Text style={styles.fabIcon}>+</Text>

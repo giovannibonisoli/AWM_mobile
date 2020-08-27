@@ -33,7 +33,7 @@ class DrawerNavigator extends React.Component {
         },
         {
           name: "detail",
-          title: "Dettaglio",
+          title: "Dettagli",
           component: DetailScreen,
           show: false
         },
