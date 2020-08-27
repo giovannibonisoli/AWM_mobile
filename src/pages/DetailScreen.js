@@ -77,7 +77,8 @@ class DetailScreen extends React.Component {
           }
         })}
         {this.props.route.params.item ?
-          (<View style={styles.footerView}>
+          ( <View>
+            <View style={styles.footerView}>
             <TouchableOpacity style={{flexDirection:"row", padding: 20}}
                               onPress={() => this.submitForm('PUT')}>
               <AntDesign name="check" size={24} color="black" />
@@ -102,6 +103,17 @@ class DetailScreen extends React.Component {
                 Elimina
               </Text>
             </TouchableOpacity>
+          </View>
+          {this.props.route.params.details ?
+            (<View style={styles.footerView}>
+                <TouchableOpacity style={{flexDirection:"row", padding: 20}}
+                                  onPress={() => this.props.navigation.navigate(this.props.route.params.details[0], {setID: this.props.route.params.item.id })}>
+                  <AntDesign name="arrowright" size={24} color="black" />
+                  <Text style={styles.buttonText}>
+                    {this.props.route.params.details[1]}
+                  </Text>
+                </TouchableOpacity>
+              </View>) : (<View></View>)}
           </View>)
           :
           (<View style={styles.footerView}>

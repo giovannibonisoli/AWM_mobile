@@ -9,17 +9,42 @@ import { request } from '../helpers/requests';
 class BarrelScreen extends React.Component {
   state = {
     items: [],
-    fields: []
+    fields: [
+              {
+                field: 'id',
+                name: 'Codice Barile',
+                type: '',
+                modifiable: false
+              },
+              {
+                field: 'wood_type',
+                name: 'Legno',
+                type: '',
+                modifiable: true
+              },
+              {
+                field: 'capability',
+                name: 'Capacità (litri)',
+                type: 'number',
+                modifiable: true
+              }
+            ]
+  }
+
+  async componentDidUpdate(prevProps){
+    if(this.props.route.params.setID !== prevProps.route.params.setID){
+      this.setState({items: await request(`barrel/set/${this.props.route.params.setID}/`, 'GET')});
+    }
   }
 
   async componentDidMount() {
-    this.setState({items: await request("barrel/set/", 'GET')});
+    this.setState({items: await request(`barrel/set/${this.props.route.params.setID}/`, 'GET')});
   }
 
   render () {
     return (
       <View style={{width: '100%', height: '100%'}}>
-        <Header name="Batterie e Barili" openDrawer={this.props.navigation.openDrawer}/>
+        <Header name="Barili" openDrawer={this.props.navigation.openDrawer}/>
         <DataList items={this.state.items}
                   fields={this.state.fields}
                   navigate={this.props.navigation.navigate}/>

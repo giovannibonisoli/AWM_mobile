@@ -20,6 +20,7 @@ class DataList extends React.Component {
       params.title = `Modifica Batteria`;
       params.action = this.props.updateDeleteAction.bind(this);
       params.item = item;
+      params.details = this.props.details;
     }
     this.props.navigate('detail', params);
   }

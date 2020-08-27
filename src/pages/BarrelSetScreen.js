@@ -49,17 +49,10 @@ class BarrelSetScreen extends React.Component {
       this.setState({ items: newArray });
     }
     else{
-      console.log('DELETE: ', item);
       await request (`barrel_set/${item.id}/`, 'DELETE');
       const updatedItems = this.state.items.filter(el => el.id !== item.id);
       this.setState({ items: updatedItems });
     }
-  }
-
-  deleteItem = async (id) => {
-    await request (`barrel_set/${id}/`, 'DELETE');
-    const updatedItems = this.state.items.filter(item => item.id !== id);
-    this.setState({ items: updatedItems });
   }
 
   async componentDidMount() {
@@ -75,6 +68,7 @@ class BarrelSetScreen extends React.Component {
                   navigate={this.props.navigation.navigate}
                   addAction={this.addItem}
                   updateDeleteAction={this.updateDeleteItem}
+                  details={["barrel", "Vai ai Barili"]}
                   />
       </View>
     );
