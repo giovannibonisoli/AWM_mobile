@@ -12,39 +12,48 @@ class BarrelSetScreen extends React.Component {
               {
                 field: 'id',
                 name: 'Numero Batteria',
-                type: 'number',
+                type: 'numeric',
                 modifiable: false
               },
               {
                 field: 'year',
                 name: 'Anno',
-                type: 'number',
+                type: 'numeric',
                 min: 1984,
                 modifiable: true
               }
             ]
   }
 
-  addItem = async (item) => {
+  addItem = async (item, action) => {
     let newItem = await request ("barrel_set/", 'POST', item);
     this.setState(prevState => ({
       items: [...prevState.items, newItem]
     }));
   }
 
-  updateItem = async (item) => {
-    let updatedItem = await request (`barrel_set/${item.id}/`, 'PUT', item);
+  updateDeleteItem = async (item, action) => {
 
-    const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
-    const newArray = [
-      // destructure all items from beginning to the indexed item
-      ...this.state.items.slice(0, itemIndex),
-      // add the updated item to the array
-      updatedItem,
-      // add the rest of the items to the array from the index after the replaced item
-      ...this.state.items.slice(itemIndex + 1)
-    ]
-    this.setState({ items: newArray });
+    if(action === 'PUT'){
+      let updatedItem = await request (`barrel_set/${item.id}/`, 'PUT', item);
+
+      const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+      const newArray = [
+        // destructure all items from beginning to the indexed item
+        ...this.state.items.slice(0, itemIndex),
+        // add the updated item to the array
+        updatedItem,
+        // add the rest of the items to the array from the index after the replaced item
+        ...this.state.items.slice(itemIndex + 1)
+      ]
+      this.setState({ items: newArray });
+    }
+    else{
+      console.log('DELETE: ', item);
+      await request (`barrel_set/${item.id}/`, 'DELETE');
+      const updatedItems = this.state.items.filter(el => el.id !== item.id);
+      this.setState({ items: updatedItems });
+    }
   }
 
   deleteItem = async (id) => {
@@ -65,8 +74,7 @@ class BarrelSetScreen extends React.Component {
                   fields={this.state.fields}
                   navigate={this.props.navigation.navigate}
                   addAction={this.addItem}
-                  updateAction={this.updateItem}
-                  deleteAction={this.deleteItem}
+                  updateDeleteAction={this.updateDeleteItem}
                   />
       </View>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import Header from '../components/Header';
@@ -10,11 +10,10 @@ class DetailScreen extends React.Component {
 
   onChangeTextHandler = (field, text) => {
     this.setState({[field]: text});
-    console.log(this.state);
   }
 
-  updateItem = () => {
-    this.props.route.params.action(this.state);
+  submitForm = (action) => {
+    this.props.route.params.action(this.state, action);
     this.props.navigation.goBack();
   }
 
@@ -56,51 +55,66 @@ class DetailScreen extends React.Component {
         </View>
         {this.props.route.params.fields.map((field, i) => {
           if (this.props.route.params.item !== undefined & !field.modifiable){
-            return (<View>
+            return (<View key={i} >
                       <Text style={styles.inputLabel}>{field.name}</Text>
-                      <View key={i} style={{...styles.inputView, backgroundColor: 'lightgray'}} >
+                      <View style={{...styles.inputView, backgroundColor: 'lightgray'}} >
                         <Text style={styles.inputText}>{this.state[field.field]}</Text>
                       </View>
                     </View>)
           }
           else{
-            return (<View>
+            return (<View key={i} >
                       <Text style={styles.inputLabel}>{field.name}</Text>
-                      <View key={i} style={{...styles.inputView, backgroundColor: 'white'}} >
+                      <View style={{...styles.inputView, backgroundColor: 'white'}} >
                         <TextInput style={styles.inputText}
                                     placeholder={field.name}
                                     placeholderTextColor="#003f5c"
+                                    keyboardType={field.type}
                                     value={`${this.state[field.field] ? this.state[field.field] : ''}`}
                                     onChangeText={text => this.onChangeTextHandler(field.field, text)} />
                       </View>
                     </View>)
           }
         })}
-        <View style={styles.footerView}>
-          <TouchableOpacity style={{flexDirection:"row", padding: 20}} onPress={this.updateItem}>
-            <AntDesign name="check" size={24} color="black" />
-            <Text style={styles.buttonText}>
-              Modifica
-            </Text>
-          </TouchableOpacity>
-            <TouchableOpacity style={{flexDirection:"row", padding: 20}} onPress={() => this.props.navigation.goBack()}>
+        {this.props.route.params.item ?
+          (<View style={styles.footerView}>
+            <TouchableOpacity style={{flexDirection:"row", padding: 20}}
+                              onPress={() => this.submitForm('PUT')}>
+              <AntDesign name="check" size={24} color="black" />
+              <Text style={styles.buttonText}>
+                Modifica
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flexDirection:"row", padding: 20}}
+                                onPress={() => {
+                                              Alert.alert(
+                                                        'Conferma',
+                                                        'Sicuro di voler procedere?',
+                                                        [
+                                                          {text: 'Yes', onPress: () => this.submitForm('DELETE')},
+                                                          {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+                                                        ],
+                                                        { cancelable: false }
+                                                        );
+                                              }}>
               <AntDesign name="delete" size={24} color="black" />
               <Text style={styles.buttonText}>
                 Elimina
               </Text>
             </TouchableOpacity>
-        </View>
-        <View style={styles.footerView}>
-          <TouchableOpacity style={{flexDirection:"row"}} onPress={() => this.props.navigation.goBack()}>
-            <AntDesign name="arrowright" size={24} color="black" />
-            <Text style={styles.buttonText}>
-              Vai ai Barili
-            </Text>
-          </TouchableOpacity>
-        </View>
+          </View>)
+          :
+          (<View style={styles.footerView}>
+            <TouchableOpacity style={{flexDirection:"row", padding: 20}}
+                                onPress={() => this.submitForm('ADD')}>
+              <AntDesign name="check" size={24} color="black" />
+              <Text style={styles.buttonText}>
+                Aggiungi
+              </Text>
+            </TouchableOpacity>
+          </View>)}
       </View>
-    );
-  }
+    )}
 };
 
 const styles = {

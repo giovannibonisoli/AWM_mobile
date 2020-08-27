@@ -99,11 +99,13 @@ const styles = StyleSheet.create({
 
   inputText:{
     height:50,
-    color:"#000"
+    color:"#000",
+    fontSize: 17,
  },
 
   loginText: {
-    color: "white"
+    color: "white",
+    fontSize: 17
   },
 
   loginBtn:{

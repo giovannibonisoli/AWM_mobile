@@ -13,12 +13,13 @@ class DataList extends React.Component {
     if(action === 'add'){
       params.item = undefined;
       params.title = `Aggiungi Batteria`;
-      params.action = this.props.addAction;
+      params.action = this.props.addAction.bind(this);
     }
     else{
       params.item = item;
       params.title = `Modifica Batteria`;
-      params.action = this.props.updateAction;
+      params.action = this.props.updateDeleteAction.bind(this);
+      params.item = item;
     }
     this.props.navigate('detail', params);
   }
