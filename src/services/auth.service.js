@@ -86,7 +86,7 @@ class AuthService {
     		return res.json();
     	})
       .then(res => {
-        this.storeUser(user.name, res.access, user.refresh);
+        this.storeUser(user.name, res.access, user.token.refresh);
       });
 
     }
