@@ -4,8 +4,6 @@ import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import Header from '../components/Header';
 import DataList from '../components/DataList';
-import { request } from '../helpers/requests';
-
 
 class DetailScreen extends React.Component {
   state = {}
@@ -13,6 +11,11 @@ class DetailScreen extends React.Component {
   onChangeTextHandler = (field, text) => {
     this.setState({[field]: text});
     console.log(this.state);
+  }
+
+  updateItem = () => {
+    this.props.route.params.action(this.state);
+    this.props.navigation.goBack();
   }
 
   componentDidUpdate(prevProps){
@@ -58,7 +61,7 @@ class DetailScreen extends React.Component {
           </View>
         ))}
         <View style={{padding: 20, flexDirection:"row", justifyContent: 'center'}}>
-          <TouchableOpacity style={{flexDirection:"row", padding: 20}} onPress={() => this.props.navigation.goBack()}>
+          <TouchableOpacity style={{flexDirection:"row", padding: 20}} onPress={this.updateItem}>
             <AntDesign name="check" size={24} color="black" />
             <Text style={{color: 'black', fontWeight: "bold", fontSize: 17, paddingHorizontal: 10}}>
               Modifica
@@ -73,7 +76,7 @@ class DetailScreen extends React.Component {
         </View>
         <View style={{padding: 20, flexDirection:"row", justifyContent: 'center'}}>
           <TouchableOpacity style={{flexDirection:"row"}} onPress={() => this.props.navigation.goBack()}>
-            <MaterialIcons name="details" size={24} color="black" />
+            <AntDesign name="arrowright" size={24} color="black" />
             <Text style={{color: 'black', fontWeight: "bold", fontSize: 17, paddingHorizontal: 10}}>
               Vai ai Barili
             </Text>

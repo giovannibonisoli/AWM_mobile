@@ -23,7 +23,8 @@ class DataList extends React.Component {
                 this.props.navigate('detail', {
                                                 fields: this.props.fields,
                                                 item: item,
-                                                title: "Batteria"
+                                                title: "Batteria",
+                                                action: this.props.updateAction
                                               });
               }}>
                 {this.props.fields.map((field, i) => (

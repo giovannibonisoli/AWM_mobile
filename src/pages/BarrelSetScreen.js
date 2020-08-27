@@ -25,6 +25,21 @@ class BarrelSetScreen extends React.Component {
             ]
   }
 
+  updateItem = async (item) => {
+    let updatedItem = await request (`barrel_set/${item.id}/`, 'PUT', item);
+
+    const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+    const newArray = [
+      // destructure all items from beginning to the indexed item
+      ...this.state.items.slice(0, itemIndex),
+      // add the updated item to the array
+      updatedItem,
+      // add the rest of the items to the array from the index after the replaced item
+      ...this.state.items.slice(itemIndex + 1)
+    ]
+    this.setState({ items: newArray });
+  }
+
   async componentDidMount() {
     this.setState({items: await request("barrel_set/", 'GET')});
   }
@@ -35,7 +50,9 @@ class BarrelSetScreen extends React.Component {
         <Header name="Batterie" openDrawer={this.props.navigation.openDrawer}/>
         <DataList items={this.state.items}
                   fields={this.state.fields}
-                  navigate={this.props.navigation.navigate}/>
+                  navigate={this.props.navigation.navigate}
+                  updateAction={this.updateItem}
+                  />
       </View>
     );
   }
