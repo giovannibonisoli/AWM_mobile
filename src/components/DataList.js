@@ -5,6 +5,24 @@ import { request } from '../helpers/requests';
 
 class DataList extends React.Component {
 
+  goToDetail = (action, item) => {
+    let params = {
+      fields: this.props.fields
+    }
+
+    if(action === 'add'){
+      params.item = undefined;
+      params.title = `Aggiungi Batteria`;
+      params.action = this.props.addAction;
+    }
+    else{
+      params.item = item;
+      params.title = `Modifica Batteria`;
+      params.action = this.props.updateAction;
+    }
+    this.props.navigate('detail', params);
+  }
+
   render() {
     const tdSpace = `${Math.floor(100 / this.props.fields.length)}%`;
     return (
@@ -19,14 +37,7 @@ class DataList extends React.Component {
           data={this.props.items}
           renderItem={({ item }) => (
             <View>
-              <TouchableOpacity style={styles.tableRow} onPress={() => {
-                this.props.navigate('detail', {
-                                                fields: this.props.fields,
-                                                item: item,
-                                                title: "Batteria",
-                                                action: this.props.updateAction
-                                              });
-              }}>
+              <TouchableOpacity style={styles.tableRow} onPress={() => this.goToDetail('edit', item)}>
                 {this.props.fields.map((field, i) => (
                   <Text key={i} style={{color: 'black', width: tdSpace, padding: 20, fontSize: 17}}>
                       {item[field.field]}
@@ -38,7 +49,7 @@ class DataList extends React.Component {
           )}
           keyExtractor={item => item.id.toString()}
         />
-        <TouchableOpacity onPress={() => alert('FAB clicked')} style={styles.fab}>
+        <TouchableOpacity onPress={() => this.goToDetail('add')} style={styles.fab}>
           <Text style={styles.fabIcon}>+</Text>
         </TouchableOpacity>
       </View>

@@ -25,6 +25,13 @@ class BarrelSetScreen extends React.Component {
             ]
   }
 
+  addItem = async (item) => {
+    let newItem = await request ("barrel_set/", 'POST', item);
+    this.setState(prevState => ({
+      items: [...prevState.items, newItem]
+    }));
+  }
+
   updateItem = async (item) => {
     let updatedItem = await request (`barrel_set/${item.id}/`, 'PUT', item);
 
@@ -40,6 +47,12 @@ class BarrelSetScreen extends React.Component {
     this.setState({ items: newArray });
   }
 
+  deleteItem = async (id) => {
+    await request (`barrel_set/${id}/`, 'DELETE');
+    const updatedItems = this.state.items.filter(item => item.id !== id);
+    this.setState({ items: updatedItems });
+  }
+
   async componentDidMount() {
     this.setState({items: await request("barrel_set/", 'GET')});
   }
@@ -51,7 +64,9 @@ class BarrelSetScreen extends React.Component {
         <DataList items={this.state.items}
                   fields={this.state.fields}
                   navigate={this.props.navigation.navigate}
+                  addAction={this.addItem}
                   updateAction={this.updateItem}
+                  deleteAction={this.deleteItem}
                   />
       </View>
     );

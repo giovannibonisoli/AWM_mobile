@@ -19,8 +19,22 @@ class DetailScreen extends React.Component {
   }
 
   componentDidUpdate(prevProps){
-    if(this.props.route.params.item &&
-        this.props.route.params.item !== prevProps.route.params.item){
+    if(this.props.route.params.item !== prevProps.route.params.item){
+      if (this.props.route.params.item === undefined){
+        Object.keys(this.state).forEach(key => {
+          this.setState({[key]: undefined});
+        });
+      }
+      else{
+        Object.keys(this.props.route.params.item).forEach(key => {
+          this.setState({[key]: this.props.route.params.item[key]});
+        });
+      }
+    }
+  }
+
+  componentDidMount(){
+    if (this.props.route.params.item){
       Object.keys(this.props.route.params.item).forEach(key => {
         this.setState({[key]: this.props.route.params.item[key]});
       });
@@ -29,55 +43,57 @@ class DetailScreen extends React.Component {
 
   render () {
     return (
-      <View>
-        <View style={{padding: 20, flexDirection:"row"}}>
+      <View style={{padding: 20}}>
+        <View style={{flexDirection:"row", paddingBottom: 10}}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <AntDesign name="close" size={24} color="black" />
           </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center'}}>
           <Text style={styles.title}>
-            {`Modifica ${this.props.route.params.title}`}
+            {this.props.route.params.title}
           </Text>
         </View>
-        {this.props.route.params.fields.map((field, i) => (
-          <View style={{paddingHorizontal: 20}} key={i}>
-            <Text style={{color: 'black', fontWeight: "bold", padding: 10, fontSize: 17}}>
-              {field.name}
-            </Text>
-            {field.modifiable ? (<View style={{...styles.inputView, backgroundColor: 'white'}} >
-                                    <TextInput
-                                      style={styles.inputText}
-                                      placeholder={field.field}
-                                      placeholderTextColor="#003f5c"
-                                      value={`${this.state[field.field]}`}
-                                      onChangeText={text => this.onChangeTextHandler(field.field, text)} />
-                                 </View>)
-                              : (<View style={{...styles.inputView, backgroundColor: 'lightgray'}} >
-                                  <Text>
-                                    {this.state[field.field]}
-                                  </Text>
-                                 </View>)}
-          </View>
-        ))}
-        <View style={{padding: 20, flexDirection:"row", justifyContent: 'center'}}>
+        {this.props.route.params.fields.map((field, i) => {
+          if (this.props.route.params.item !== undefined & !field.modifiable){
+            return (<View>
+                      <Text style={styles.inputLabel}>{field.name}</Text>
+                      <View key={i} style={{...styles.inputView, backgroundColor: 'lightgray'}} >
+                        <Text style={styles.inputText}>{this.state[field.field]}</Text>
+                      </View>
+                    </View>)
+          }
+          else{
+            return (<View>
+                      <Text style={styles.inputLabel}>{field.name}</Text>
+                      <View key={i} style={{...styles.inputView, backgroundColor: 'white'}} >
+                        <TextInput style={styles.inputText}
+                                    placeholder={field.name}
+                                    placeholderTextColor="#003f5c"
+                                    value={`${this.state[field.field] ? this.state[field.field] : ''}`}
+                                    onChangeText={text => this.onChangeTextHandler(field.field, text)} />
+                      </View>
+                    </View>)
+          }
+        })}
+        <View style={styles.footerView}>
           <TouchableOpacity style={{flexDirection:"row", padding: 20}} onPress={this.updateItem}>
             <AntDesign name="check" size={24} color="black" />
-            <Text style={{color: 'black', fontWeight: "bold", fontSize: 17, paddingHorizontal: 10}}>
+            <Text style={styles.buttonText}>
               Modifica
             </Text>
           </TouchableOpacity>
             <TouchableOpacity style={{flexDirection:"row", padding: 20}} onPress={() => this.props.navigation.goBack()}>
               <AntDesign name="delete" size={24} color="black" />
-              <Text style={{color: 'black', fontWeight: "bold", fontSize: 17, paddingHorizontal: 10}}>
+              <Text style={styles.buttonText}>
                 Elimina
               </Text>
             </TouchableOpacity>
         </View>
-        <View style={{padding: 20, flexDirection:"row", justifyContent: 'center'}}>
+        <View style={styles.footerView}>
           <TouchableOpacity style={{flexDirection:"row"}} onPress={() => this.props.navigation.goBack()}>
             <AntDesign name="arrowright" size={24} color="black" />
-            <Text style={{color: 'black', fontWeight: "bold", fontSize: 17, paddingHorizontal: 10}}>
+            <Text style={styles.buttonText}>
               Vai ai Barili
             </Text>
           </TouchableOpacity>
@@ -88,9 +104,19 @@ class DetailScreen extends React.Component {
 };
 
 const styles = {
-  inputText: {
+
+  title: {
+    fontWeight:"bold",
+    fontSize: 30,
     color:"#000",
-    fontSize: 17
+  },
+
+  inputLabel: {
+    color:"#000",
+    fontSize: 17,
+    fontWeight: 'bold',
+    paddingTop: 20,
+    paddingBottom: 10
   },
 
   inputView:  {
@@ -98,16 +124,26 @@ const styles = {
     borderWidth: 1,
     borderRadius:15,
     justifyContent:"center",
-    padding: 20,
   },
 
-  title: {
-    fontWeight:"bold",
-    fontSize: 30,
+  inputText: {
     color:"#000",
-    marginBottom: 10
+    fontSize: 17,
+    padding: 20
   },
 
+  footerView: {
+    flexDirection:"row",
+    justifyContent: 'center',
+    paddingTop: 20
+  },
+
+  buttonText: {
+    color: 'black',
+    fontWeight: "bold",
+    fontSize: 17,
+    paddingHorizontal: 10
+  }
 };
 
 export default DetailScreen;
