@@ -11,7 +11,7 @@ class DataList extends React.Component {
       <View style={styles.container}>
         <View style={styles.tableRow}>
           {this.props.fields.map((field, i) => (
-            <Text key={i} style={{fontWeight:"bold", color: 'black', width: tdSpace, padding: 20}}>{field.name}</Text>
+            <Text key={i} style={{...styles.tH, width: tdSpace}}>{field.name}</Text>
           ))}
         </View>
         <View style={styles.rowDivider}></View>
@@ -27,7 +27,7 @@ class DataList extends React.Component {
                                               });
               }}>
                 {this.props.fields.map((field, i) => (
-                  <Text key={i} style={{color: 'black', width: tdSpace, padding: 20}}>
+                  <Text key={i} style={{color: 'black', width: tdSpace, padding: 20, fontSize: 17}}>
                       {item[field.field]}
                   </Text>
                 ))}
@@ -56,6 +56,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection:"row",
     alignItems:"center"
+  },
+
+  tH: {
+        fontWeight:"bold",
+        color: 'black',
+        padding: 20,
+        fontSize: 17
   },
 
   rowDivider:{

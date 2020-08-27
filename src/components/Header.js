@@ -9,7 +9,7 @@ class Header extends React.Component {
           <TouchableOpacity onPress={this.props.openDrawer}>
             <Ionicons name="ios-menu" size={32} />
           </TouchableOpacity>
-          <Text style={{fontWeight:"bold"}}>{this.props.name}</Text>
+          <Text style={{fontWeight:"bold", fontSize: 17}}>{this.props.name}</Text>
         </View>
       )
     }

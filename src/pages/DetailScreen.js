@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, Text, TouchableOpacity } from 'react-native';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import Header from '../components/Header';
 import DataList from '../components/DataList';
@@ -28,20 +28,18 @@ class DetailScreen extends React.Component {
     return (
       <View>
         <View style={{padding: 20, flexDirection:"row"}}>
-          <TouchableOpacity onPress={() => {
-            this.props.navigation.goBack();
-          }}>
+          <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <AntDesign name="close" size={24} color="black" />
           </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center'}}>
           <Text style={styles.title}>
-            {`${this.props.route.params.title} ${this.props.route.params.item.id}`}
+            {`Modifica ${this.props.route.params.title}`}
           </Text>
         </View>
         {this.props.route.params.fields.map((field, i) => (
           <View style={{paddingHorizontal: 20}} key={i}>
-            <Text style={{color: 'black', fontWeight:"bold", padding: 10}}>
+            <Text style={{color: 'black', fontWeight: "bold", padding: 10, fontSize: 17}}>
               {field.name}
             </Text>
             {field.modifiable ? (<View style={{...styles.inputView, backgroundColor: 'white'}} >
@@ -54,11 +52,33 @@ class DetailScreen extends React.Component {
                                  </View>)
                               : (<View style={{...styles.inputView, backgroundColor: 'lightgray'}} >
                                   <Text>
-                                      {this.state[field.field]}
-                                   </Text>
+                                    {this.state[field.field]}
+                                  </Text>
                                  </View>)}
           </View>
         ))}
+        <View style={{padding: 20, flexDirection:"row", justifyContent: 'center'}}>
+          <TouchableOpacity style={{flexDirection:"row", padding: 20}} onPress={() => this.props.navigation.goBack()}>
+            <AntDesign name="check" size={24} color="black" />
+            <Text style={{color: 'black', fontWeight: "bold", fontSize: 17, paddingHorizontal: 10}}>
+              Modifica
+            </Text>
+          </TouchableOpacity>
+            <TouchableOpacity style={{flexDirection:"row", padding: 20}} onPress={() => this.props.navigation.goBack()}>
+              <AntDesign name="delete" size={24} color="black" />
+              <Text style={{color: 'black', fontWeight: "bold", fontSize: 17, paddingHorizontal: 10}}>
+                Elimina
+              </Text>
+            </TouchableOpacity>
+        </View>
+        <View style={{padding: 20, flexDirection:"row", justifyContent: 'center'}}>
+          <TouchableOpacity style={{flexDirection:"row"}} onPress={() => this.props.navigation.goBack()}>
+            <MaterialIcons name="details" size={24} color="black" />
+            <Text style={{color: 'black', fontWeight: "bold", fontSize: 17, paddingHorizontal: 10}}>
+              Vai ai Barili
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -66,24 +86,23 @@ class DetailScreen extends React.Component {
 
 const styles = {
   inputText: {
-    height:50,
-    color:"#000"
+    color:"#000",
+    fontSize: 17
   },
 
   inputView:  {
-    width:"100%",
+    width: "100%",
     borderWidth: 1,
     borderRadius:15,
-    height: 50,
     justifyContent:"center",
-    padding: 20
+    padding: 20,
   },
 
   title: {
     fontWeight:"bold",
-    fontSize:50,
+    fontSize: 30,
     color:"#000",
-    marginBottom:40
+    marginBottom: 10
   },
 
 };

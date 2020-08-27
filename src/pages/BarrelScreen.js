@@ -19,7 +19,7 @@ class BarrelScreen extends React.Component {
   render () {
     return (
       <View style={{width: '100%', height: '100%'}}>
-        <Header name="Batteria" openDrawer={this.props.navigation.openDrawer}/>
+        <Header name="Batterie e Barili" openDrawer={this.props.navigation.openDrawer}/>
         <DataList items={this.state.items}
                   fields={this.state.fields}
                   navigate={this.props.navigation.navigate}/>
