@@ -6,23 +6,37 @@ import { request } from '../helpers/requests';
 class DataList extends React.Component {
 
   goToDetail = (action, item) => {
-    let params = {
-      fields: this.props.fields
-    }
+    let params = {}
 
-    if(action === 'add'){
-      params.item = undefined;
-      params.title = `Aggiungi ${this.props.objectName}`;
-      params.action = this.props.addAction.bind(this);
+    if(!this.props.variable){
+      params.fields= this.props.fields;
+      if(action === 'add'){
+        params.item = undefined;
+        params.action = this.props.addAction.bind(this);
+        params.title = `Aggiungi ${this.props.objectName}`;
+      }
+      else{
+        params.item = item;
+        params.action = this.props.updateDeleteAction.bind(this);
+        params.details = this.props.details;
+        params.title = `Modifica ${this.props.objectName}`;
+      }
+      this.props.navigate('detail', params);
     }
     else{
-      params.item = item;
-      params.title = `Modifica ${this.props.objectName}`;
-      params.action = this.props.updateDeleteAction.bind(this);
-      params.item = item;
-      params.details = this.props.details;
+      if(action === 'add'){
+        params.item = undefined;
+        params.action = this.props.addAction.bind(this);
+        params.title = "Aggiungi";
+      }
+      else{
+        params.item = item;
+        params.action = this.props.updateDeleteAction.bind(this);
+        params.details = this.props.details;
+        params.title = `Modifica`;
+      }
+      this.props.navigate('operationDetail', params);
     }
-    this.props.navigate('detail', params);
   }
 
   render() {

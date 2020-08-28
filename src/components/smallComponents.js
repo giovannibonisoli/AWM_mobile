@@ -17,9 +17,11 @@ export class Header extends React.Component {
 
 export class CustomInput extends React.Component {
   render(){
+    console.log(this.props.labeled)
     return (
       <View>
-        <Text style={styles.inputLabel}>{this.props.field.name}</Text>
+        {this.props.labeled ? (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)
+                            : (<View></View>)}
         <View style={{...styles.inputView, backgroundColor: 'white'}} >
           <TextInput style={styles.inputText}
                       placeholder={this.props.field.name}

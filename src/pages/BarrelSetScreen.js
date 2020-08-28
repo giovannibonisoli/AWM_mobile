@@ -33,7 +33,6 @@ class BarrelSetScreen extends React.Component {
   }
 
   updateDeleteItem = async (item, action) => {
-    console.log('elimina: ', item)
     if(action === 'PUT'){
       let updatedItem = await request (`barrel_set/${item.id}/`, 'PUT', item);
 

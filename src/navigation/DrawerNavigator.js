@@ -5,6 +5,7 @@ import BarrelSetScreen from '../pages/BarrelSetScreen';
 import BarrelScreen from '../pages/BarrelScreen';
 import OperationTypeScreen from '../pages/OperationTypeScreen';
 import DetailScreen from '../pages/DetailScreen';
+import VariableDetailScreen from '../pages/VariableDetailScreen';
 import Sidebar from '../components/Sidebar';
 
 const Drawer = createDrawerNavigator();
@@ -36,6 +37,12 @@ class DrawerNavigator extends React.Component {
           name: "detail",
           title: "Dettagli",
           component: DetailScreen,
+          show: false
+        },
+        {
+          name: "operationDetail",
+          title: "DettagliOperazione",
+          component: VariableDetailScreen,
           show: false
         },
     ]
