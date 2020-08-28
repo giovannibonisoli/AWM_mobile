@@ -29,7 +29,8 @@ class DrawerNavigator extends React.Component {
           name: "operationType",
           title: "Tipi di Operazione",
           component: OperationTypeScreen,
-          show: true
+          show: true,
+          icon: require("../static/operation.png")
         },
         {
           name: "detail",
