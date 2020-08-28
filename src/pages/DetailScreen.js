@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert } from 'react-native';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 import { Header, CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
 import DataList from '../components/DataList';

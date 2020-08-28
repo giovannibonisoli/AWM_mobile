@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text, Alert } from 'reac
 import { AntDesign } from '@expo/vector-icons';
 
 import AuthService from '../services/auth.service';
+import { Header, CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
 
 class LoginScreen extends React.Component {
   state = {
@@ -42,25 +43,15 @@ class LoginScreen extends React.Component {
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>Acetaia</Text>
-        <View style={styles.inputView} >
-          <TextInput
-             style={styles.inputText}
-             placeholder="Nome Utente"
-             placeholderTextColor="#003f5c"
-             onChangeText={text => this.onChangeTextHandler("username", text)}
-           />
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.logo}>Acetaia</Text>
         </View>
-        <View style={styles.inputView} >
-           <TextInput
-              style={styles.inputText}
-              secureTextEntry={true}
-              placeholder="Password"
-              placeholderTextColor="#003f5c"
-              onChangeText={text => this.onChangeTextHandler("password", text)}
-            />
-        </View>
-
+        <CustomInput field={{field: 'username', name: 'Nome Utente',  type: 'default'}}
+                      value={`${this.state.username ? this.state.username : ''}`}
+                      onChangeText={this.onChangeTextHandler}/>
+        <CustomInput field={{field: 'password', name: 'Password',  type: 'default'}}
+                      value={`${this.state.username ? this.state.username : ''}`}
+                      onChangeText={this.onChangeTextHandler}/>
         <TouchableOpacity style={styles.loginBtn} onPress={this.handleLogin}>
           <Text style={styles.loginText}>Invia</Text>
         </TouchableOpacity>
@@ -74,27 +65,14 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
-  },
-
-  inputView:  {
-    width:"80%",
-    backgroundColor:"white",
-    borderWidth: 1,
-    borderRadius:15,
-    height:50,
-    marginBottom:20,
-    justifyContent:"center",
-    padding:20
+    padding: 20
   },
 
   logo: {
     fontWeight:"bold",
-    fontSize:50,
+    fontSize: 50,
     color:"#000",
-    marginBottom:40
   },
 
   inputText:{
@@ -109,7 +87,7 @@ const styles = StyleSheet.create({
   },
 
   loginBtn:{
-    width:"80%",
+    width:"100%",
     color: "#fff",
     backgroundColor:"#3366ff",
     borderRadius: 15,
