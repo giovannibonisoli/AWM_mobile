@@ -9,8 +9,8 @@ export const alertError = (title, message) => {
 
 export const validate = (fields, values) => {
   for(let field of fields) {
-    if (values[field.field] === ""){
-      alertError("Errore", `Inserire ${field.name}`);
+    if (values[field.field] === "" || values[field.field] === undefined){
+      alertError("Errore", `Inserire "${field.name}"`);
       return false;
     }
   }

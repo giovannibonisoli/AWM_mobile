@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { Header, CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
 import DataList from '../components/DataList';
+import { validate, alertError } from '../helpers/FormValidation';
 
 class DetailScreen extends React.Component {
   state = {}
@@ -13,9 +14,10 @@ class DetailScreen extends React.Component {
   }
 
   submitForm = (action) => {
-    console.log(this.state);
-    this.props.route.params.action(this.state, action);
-    this.props.navigation.goBack();
+    if(validate(this.props.route.params.fields, this.state)){
+      this.props.route.params.action(this.state, action);
+      this.props.navigation.goBack();
+    }
   }
 
   componentDidUpdate(prevProps){
