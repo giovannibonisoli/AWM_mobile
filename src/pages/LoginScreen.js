@@ -50,7 +50,7 @@ class LoginScreen extends React.Component {
                       value={`${this.state.username ? this.state.username : ''}`}
                       onChangeText={this.onChangeTextHandler}/>
         <CustomInput field={{field: 'password', name: 'Password',  type: 'default'}}
-                      value={`${this.state.username ? this.state.username : ''}`}
+                      value={`${this.state.password ? this.state.password : ''}`}
                       onChangeText={this.onChangeTextHandler}/>
         <TouchableOpacity style={styles.loginBtn} onPress={this.handleLogin}>
           <Text style={styles.loginText}>Invia</Text>
