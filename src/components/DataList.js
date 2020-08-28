@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
   },
 
   tH: {
-        fontWeight:"bold",
-        color: 'black',
-        padding: 20,
-        fontSize: 17
+    fontWeight:"bold",
+    color: 'black',
+    padding: 20,
+    fontSize: 17
   },
 
   rowDivider:{
