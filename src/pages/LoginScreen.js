@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 
+import { CustomInput} from '../components/smallComponents';
 import AuthService from '../services/auth.service';
-import { Header, CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
+import { validate, alertError } from '../helpers/FormValidation';
+
+
 
 class LoginScreen extends React.Component {
   state = {
@@ -23,13 +25,19 @@ class LoginScreen extends React.Component {
   };
 
   handleLogin = async () => {
-    if (this.state.username === ""){
-      this.alertError("Errore", "Inserire \"Nome Utente\"");
-    }
-    else if (this.state.password === ""){
-      this.alertError("Errore", "Inserire \"Password\"");
-    }
-    else{
+    const validation = validate([
+                                  {
+                                    field: 'username',
+                                    name: 'Nome Utente',
+                                    type: 'default'
+                                  },
+                                  {
+                                    field: 'password',
+                                    name: 'Password',
+                                    secure: true
+                                  }
+                                ], this.state);
+    if (validation){
       const res = await AuthService.login(this.state.username, this.state.password);
       if (res === "login successful"){
         this.props.navigation.navigate('Drawer', { username: this.state.username });
@@ -49,7 +57,7 @@ class LoginScreen extends React.Component {
         <CustomInput field={{field: 'username', name: 'Nome Utente',  type: 'default'}}
                       value={`${this.state.username ? this.state.username : ''}`}
                       onChangeText={this.onChangeTextHandler}/>
-        <CustomInput field={{field: 'password', name: 'Password',  type: 'default'}}
+        <CustomInput field={{field: 'password', name: 'Password',  secure: true}}
                       value={`${this.state.password ? this.state.password : ''}`}
                       onChangeText={this.onChangeTextHandler}/>
         <TouchableOpacity style={styles.loginBtn} onPress={this.handleLogin}>
@@ -74,12 +82,6 @@ const styles = StyleSheet.create({
     fontSize: 50,
     color:"#000",
   },
-
-  inputText:{
-    height:50,
-    color:"#000",
-    fontSize: 17,
- },
 
   loginText: {
     color: "white",

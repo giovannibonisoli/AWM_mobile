@@ -25,6 +25,7 @@ export class CustomInput extends React.Component {
                       placeholder={this.props.field.name}
                       placeholderTextColor="#003f5c"
                       keyboardType={this.props.field.type}
+                      secureTextEntry={this.props.field.secure}
                       value={this.props.value}
                       onChangeText={text => this.props.onChangeText(this.props.field.field, text)} />
         </View>

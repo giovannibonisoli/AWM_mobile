@@ -49,7 +49,7 @@ class DataList extends React.Component {
               <View style={styles.rowDivider}></View>
             </View>
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
         />
         <TouchableOpacity onPress={() => this.goToDetail('add')} style={styles.fab}>
           <Text style={styles.fabIcon}>+</Text>
