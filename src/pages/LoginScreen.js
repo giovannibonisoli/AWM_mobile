@@ -13,6 +13,19 @@ class LoginScreen extends React.Component {
     password: ""
   }
 
+  fields = [
+            {
+              field: 'username',
+              name: 'Nome Utente',
+              type: 'default'
+            },
+            {
+              field: 'password',
+              name: 'Password',
+              secure: true
+            }
+          ]
+
   onChangeTextHandler = (field, text) => {
     this.setState({[field]: text});
   }
@@ -25,18 +38,7 @@ class LoginScreen extends React.Component {
   };
 
   handleLogin = async () => {
-    const validation = validate([
-                                  {
-                                    field: 'username',
-                                    name: 'Nome Utente',
-                                    type: 'default'
-                                  },
-                                  {
-                                    field: 'password',
-                                    name: 'Password',
-                                    secure: true
-                                  }
-                                ], this.state);
+    const validation = validate(this.fields, this.state);
     if (validation){
       const res = await AuthService.login(this.state.username, this.state.password);
       if (res === "login successful"){
@@ -54,16 +56,15 @@ class LoginScreen extends React.Component {
         <View style={{alignItems: 'center'}}>
           <Text style={styles.logo}>Acetaia</Text>
         </View>
-        <CustomInput field={{field: 'username', name: 'Nome Utente',  type: 'default'}}
-                      value={`${this.state.username ? this.state.username : ''}`}
-                      onChangeText={this.onChangeTextHandler}/>
-        <CustomInput field={{field: 'password', name: 'Password',  secure: true}}
-                      value={`${this.state.password ? this.state.password : ''}`}
-                      onChangeText={this.onChangeTextHandler}/>
+        {this.fields.map((field, i) => (
+          <CustomInput key={i}
+                        field={field}
+                        value={`${this.state[field.field] ? this.state[field.field] : ''}`}
+                        onChangeText={this.onChangeTextHandler}/>
+        ))}
         <TouchableOpacity style={styles.loginBtn} onPress={this.handleLogin}>
           <Text style={styles.loginText}>Invia</Text>
         </TouchableOpacity>
-
       </View>
     );
   }
