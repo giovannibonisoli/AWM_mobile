@@ -4,6 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import BarrelSetScreen from '../pages/BarrelSetScreen';
 import BarrelScreen from '../pages/BarrelScreen';
 import OperationTypeScreen from '../pages/OperationTypeScreen';
+import OperationScreen from '../pages/OperationScreen';
 import DetailScreen from '../pages/DetailScreen';
 import VariableDetailScreen from '../pages/VariableDetailScreen';
 import Sidebar from '../components/Sidebar';
@@ -34,17 +35,24 @@ class DrawerNavigator extends React.Component {
           icon: require("../static/operation.png")
         },
         {
+          name: "operation",
+          title: "",
+          component: OperationScreen,
+          show: false
+        },
+        {
           name: "detail",
-          title: "Dettagli",
+          title: "",
           component: DetailScreen,
           show: false
         },
         {
           name: "operationDetail",
-          title: "DettagliOperazione",
+          title: "",
           component: VariableDetailScreen,
           show: false
         },
+
     ]
   }
   render(){

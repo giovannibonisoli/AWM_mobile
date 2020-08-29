@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 import { Header, CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
