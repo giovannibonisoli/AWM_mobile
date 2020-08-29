@@ -13,7 +13,6 @@ class AuthService {
     .then(res => res.json())
     .then(data => {
       if(data.access && data.refresh){
-        console.log('store user');
         this.storeUser(username, data.access, data.refresh);
         return "login successful";
       }
@@ -23,7 +22,6 @@ class AuthService {
   }
 
   storeUser = async (username, access, refresh) => {
-    console.log('refresh: ', refresh);
     try {
       await AsyncStorage.setItem('user', JSON.stringify({
         name: username,
@@ -65,8 +63,6 @@ class AuthService {
 
   checkToken = async () => {
     const user = await this.getCurrentUser();
-    console.log('get user to check token', user);
-    console.log('get refresh', user.token.refresh)
 
     const startDate = Date.parse(user.date);
     const endDate = new Date();
