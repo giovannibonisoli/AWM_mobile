@@ -1,12 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-community/picker';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 
-import { AntDesign } from '@expo/vector-icons';
-
-import { Header, CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
-import DataList from '../components/DataList';
+import {CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
 import { validate, alertError } from '../helpers/FormValidation';
 
 class VariableDetailScreen extends React.Component {
@@ -25,7 +20,7 @@ class VariableDetailScreen extends React.Component {
         if(this.props.item){
           return { ...field, name: text};
         }
-        return { ...field, name: text, field: e.target.value.toLowerCase().replace(/\s+/g, '')};
+        return { ...field, name: text, field: text.toLowerCase().replace(/\s+/g, '')};
       }
     });
 
@@ -53,13 +48,14 @@ class VariableDetailScreen extends React.Component {
     });
   };
 
-  handleSubmit = () => {
-    this.props.action({
-      id : this.state.id,
-      name: this.state.name,
-      description: this.state.description,
-      schema: this.state.schema
-    });
+  submitForm = (action) => {
+      this.props.route.params.action({
+        id : this.state.id,
+        name: this.state.name,
+        description: this.state.description,
+        schema: this.state.schema
+      }, action);
+      this.props.navigation.goBack();
   };
 
   componentDidUpdate(prevProps){
@@ -97,11 +93,11 @@ class VariableDetailScreen extends React.Component {
   render(){
     const item = this.props.route.params.item;
     const fields = this.props.route.params.fields;
-    return (<View style={{padding: 20, flex: 1}}>
+    return (<ScrollView style={styles.container}>
               <IconButton style={{paddingBottom: 20}} iconName="close" onPress={() => this.props.navigation.goBack()}/>
               <View style={{alignItems: 'center', flexDirection:'row', paddingBottom: 10}}>
                 <Text style={styles.title}>
-                  {this.props.route.params.title}
+                  {`${this.props.route.params.title} "${this.state.name}"`}
                 </Text>
               </View>
               {item ? (<DisabledInput name="Nome" value={this.state.name}/>)
@@ -135,17 +131,60 @@ class VariableDetailScreen extends React.Component {
                 </View>
               ))}
               <IconButton style={{paddingTop: 20}} iconName="plus" onPress={this.handleAddShareholder}/>
-            </View>);
+              {this.props.route.params.item ?
+                (<View>
+                  <View style={styles.footerView}>
+                    <IconButton iconName="check" label="Modifica" onPress={() => this.submitForm('PUT')}/>
+                    <IconButton iconName="delete" label="Elimina" onPress={() => {
+                                                                                  Alert.alert(
+                                                                                            'Conferma',
+                                                                                            'Sicuro di voler procedere?',
+                                                                                            [
+                                                                                              {text: 'Yes', onPress: () => this.submitForm('DELETE')},
+                                                                                              {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+                                                                                            ],
+                                                                                            { cancelable: false }
+                                                                                            );
+                                                                                  }}/>
+                  </View>
+                  <View style={styles.footerView}>
+                    {this.props.route.params.details ?
+                      (<IconButton iconName="arrowright"
+                                    label={this.props.route.params.details[1]}
+                                    onPress={() => this.props.navigation.navigate(this.props.route.params.details[0],
+                                                                                  {setID: this.props.route.params.item.id })}/>
+                          ) : (<View></View>)}
+                  </View>
+                </View>)
+                :
+                (<View style={{...styles.footerView}}>
+                  <IconButton iconName="check" label="Aggiungi" onPress={() => this.submitForm('ADD')}/>
+                </View>)}
+            </ScrollView>);
   }
 
 };
 
 const styles = {
+  container: {
+    flex: 1,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 40
+  },
+
   title: {
+    alignItems: 'center',
     fontWeight:"bold",
     fontSize: 30,
     color:"#000",
   },
+
+  footerView: {
+    flexDirection:"row",
+    justifyContent: 'center',
+    paddingTop: 20
+  }
 
 
 };
