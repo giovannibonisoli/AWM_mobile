@@ -13,19 +13,19 @@ class BarrelScreen extends React.Component {
               {
                 field: 'id',
                 name: 'Codice Barile',
-                type: 'default',
+                type: 'text',
                 modifiable: false
               },
               {
                 field: 'wood_type',
                 name: 'Legno',
-                type: 'default',
+                type: 'text',
                 modifiable: true
               },
               {
                 field: 'capability',
                 name: 'Capacità (litri)',
-                type: 'numeric',
+                type: 'number',
                 modifiable: true
               }
             ]

@@ -14,9 +14,9 @@ class VariableDetailScreen extends React.Component {
     schema: [{ field:"", name: "", type: ""}]
   }
 
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
+  onChangeTextHandler = (field, text) => {
+    this.setState({[field]: text});
+  }
 
   handleShareholderNameChange = (idx, text) => {
     const newSchema= this.state.schema.map((field, sidx) => {
@@ -97,13 +97,9 @@ class VariableDetailScreen extends React.Component {
   render(){
     const item = this.props.route.params.item;
     const fields = this.props.route.params.fields;
-    return (<View style={{padding: 20}}>
-              <View style={{flexDirection:"row", paddingBottom: 10}}>
-                <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                  <AntDesign name="close" size={24} color="black" />
-                </TouchableOpacity>
-              </View>
-              <View style={{alignItems: 'center', flexDirection:'row'}}>
+    return (<View style={{padding: 20, flex: 1}}>
+              <IconButton style={{paddingBottom: 20}} iconName="close" onPress={() => this.props.navigation.goBack()}/>
+              <View style={{alignItems: 'center', flexDirection:'row', paddingBottom: 10}}>
                 <Text style={styles.title}>
                   {this.props.route.params.title}
                 </Text>
@@ -112,15 +108,33 @@ class VariableDetailScreen extends React.Component {
                     : (<CustomInput field={{field: "name", name: "Nome"}}
                                     value={`${this.state.name ? this.state.name : ''}`}
                                     onChangeText={this.onChangeTextHandler} labeled/>)}
-              <CustomInput field={{field: "description", name: "Descrizione"}}
+
+              <CustomInput style={{paddingTop: 20}}
+                            field={{field: "description", name: "Descrizione"}}
                             value={`${this.state.description ? this.state.description : ''}`}
                             onChangeText={this.onChangeTextHandler} labeled/>
+
               {this.state.schema.map((field, idx) => (
-                <View key={idx} style={{flexDirection:"row"}}>
+                <View key={idx} style={{flexDirection:"row", paddingTop: 20}}>
+                  <CustomInput style={{width: '45%', paddingRight: 10}}
+                                field={field}
+                                value={`${field.name ? field.name : ''}`}
+                                onChangeText={(field, text) => this.handleShareholderNameChange(idx, text)}/>
+                  <CustomInput style={{width: '45%', paddingRight: 10}}
+                                field={{type: "select", options: [
+                                                                  {label: "testo", value: "text"},
+                                                                  {label: "numero", value: "number"},
+                                                                  {label: "barile", value: "barrel"}
+                                                                ]}}
+                                value={`${field.type ? field.type : ''}`}
+                                onChangeText={(field, text) => this.handleShareholderTypeChange(idx, text)}/>
+                  <IconButton style={{justifyContent: 'center'}}
+                              iconName="minus"
+                              onPress={this.handleRemoveShareholder(idx)}/>
 
                 </View>
-
               ))}
+              <IconButton style={{paddingTop: 20}} iconName="plus" onPress={this.handleAddShareholder}/>
             </View>);
   }
 
@@ -132,11 +146,8 @@ const styles = {
     fontSize: 30,
     color:"#000",
   },
-  footerView: {
-    flexDirection:"row",
-    justifyContent: 'center',
-    paddingTop: 20
-  }
+
+
 };
 
 export default VariableDetailScreen;

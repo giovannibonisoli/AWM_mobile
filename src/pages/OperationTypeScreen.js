@@ -12,7 +12,7 @@ class OperationTypeScreen extends React.Component {
               {
                 field: 'name',
                 name: 'Nome',
-                type: 'default',
+                type: 'text',
                 modifiable: true
               },
               {

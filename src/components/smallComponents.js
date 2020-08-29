@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import { Ionicons, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { Picker } from '@react-native-community/picker';
 
 export class Header extends React.Component {
   render(){
@@ -17,19 +18,30 @@ export class Header extends React.Component {
 
 export class CustomInput extends React.Component {
   render(){
-    console.log(this.props.labeled)
+    const type = this.props.field.type;
     return (
-      <View>
+      <View style={{...this.props.style}}>
         {this.props.labeled ? (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)
                             : (<View></View>)}
         <View style={{...styles.inputView, backgroundColor: 'white'}} >
-          <TextInput style={styles.inputText}
+        {this.props.field.type ==="select" ?
+          (<Picker style={{color:"#000", fontSize: 17, padding: 34}}
+            selectedValue={this.props.value}
+            onValueChange={(itemValue, itemIndex) =>
+              this.props.onChangeText(this.props.field.field, itemValue)
+            }>
+            {this.props.field.options.map((option, i) =>
+              (<Picker.Item key={i} label={option.label} value={option.value} />))}
+          </Picker>)
+          :
+          (<TextInput style={styles.inputText}
                       placeholder={this.props.field.name}
                       placeholderTextColor="#003f5c"
-                      keyboardType={this.props.field.type}
+                      //keyboardType={this.props.field.type}
                       secureTextEntry={this.props.field.secure}
                       value={this.props.value}
                       onChangeText={text => this.props.onChangeText(this.props.field.field, text)} />
+          )}
         </View>
       </View>
     )}
@@ -49,15 +61,16 @@ export class DisabledInput extends React.Component {
 
 export class IconButton extends React.Component {
   render(){
-    return (
-      <TouchableOpacity style={{flexDirection:"row", padding: 20}}
-                          onPress={this.props.onPress}>
-        <AntDesign name={this.props.iconName} size={24} color="black" />
-        <Text style={styles.buttonText}>
-          {this.props.label}
-        </Text>
-      </TouchableOpacity>
-    )}
+    return (<View style={{...this.props.style, flexDirection:"row"}}>
+              <TouchableOpacity style={{flexDirection:"row", alignItems: 'center'}} onPress={this.props.onPress}>
+                <AntDesign name={this.props.iconName} size={24} color="black" />
+                <Text style={styles.buttonText}>
+                  {this.props.label}
+                </Text>
+              </TouchableOpacity>
+          </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -75,7 +88,6 @@ const styles = StyleSheet.create({
     color:"#000",
     fontSize: 17,
     fontWeight: 'bold',
-    paddingTop: 20,
     paddingBottom: 10
   },
 

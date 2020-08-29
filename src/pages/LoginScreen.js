@@ -17,12 +17,12 @@ class LoginScreen extends React.Component {
             {
               field: 'username',
               name: 'Nome Utente',
-              type: 'default'
+              type: 'text'
             },
             {
               field: 'password',
               name: 'Password',
-              secure: true
+              type: 'password'
             }
           ]
 
@@ -60,7 +60,7 @@ class LoginScreen extends React.Component {
           <CustomInput key={i}
                         field={field}
                         value={`${this.state[field.field] ? this.state[field.field] : ''}`}
-                        onChangeText={this.onChangeTextHandler}/>
+                        onChangeText={this.onChangeTextHandler} labeled/>
         ))}
         <TouchableOpacity style={styles.loginBtn} onPress={this.handleLogin}>
           <Text style={styles.loginText}>Invia</Text>

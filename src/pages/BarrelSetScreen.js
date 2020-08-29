@@ -12,13 +12,13 @@ class BarrelSetScreen extends React.Component {
               {
                 field: 'id',
                 name: 'Numero Batteria',
-                type: 'numeric',
+                type: 'number',
                 modifiable: false
               },
               {
                 field: 'year',
                 name: 'Anno',
-                type: 'numeric',
+                type: 'number',
                 min: 1984,
                 modifiable: true
               }
