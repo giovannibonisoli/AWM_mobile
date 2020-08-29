@@ -24,7 +24,7 @@ class OperationTypeScreen extends React.Component {
             ]
   }
 
-  addItem = async (item) => {
+  addItem = async (item, action) => {
     item.id = item.name.toLowerCase().replace(/\s/g, '');
     item.schema = JSON.stringify(item.schema);
     let newItem = await request("operation_type/", 'POST', item);
@@ -33,28 +33,27 @@ class OperationTypeScreen extends React.Component {
     }));
   }
 
-  updateDeleteItem = async (item) => {
-    updateDeleteItem = async (item, action) => {
-      if(action === 'PUT'){
-        item.schema = JSON.stringify(item.schema);
-        let updatedItem = await request (`operation_type/${item.id}/`, 'PUT', item);
+  updateDeleteItem = async (item, action) => {
+    console.log(item, action);
+    if(action === 'PUT'){
+      item.schema = JSON.stringify(item.schema);
+      let updatedItem = await request (`operation_type/${item.id}/`, 'PUT', item);
 
-        const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
-        const newArray = [
-          // destructure all items from beginning to the indexed item
-          ...this.state.items.slice(0, itemIndex),
-          // add the updated item to the array
-          updatedItem,
-          // add the rest of the items to the array from the index after the replaced item
-          ...this.state.items.slice(itemIndex + 1)
-        ]
-        this.setState({ items: newArray });
-      }
-      else{
-        await request (`operation_type/${id}/`, 'DELETE');
-        const updatedItems = this.state.items.filter(item => item.id !== id);
-        this.setState({ items: updatedItems });
-      }
+      const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+      const newArray = [
+        // destructure all items from beginning to the indexed item
+        ...this.state.items.slice(0, itemIndex),
+        // add the updated item to the array
+        updatedItem,
+        // add the rest of the items to the array from the index after the replaced item
+        ...this.state.items.slice(itemIndex + 1)
+      ]
+      this.setState({ items: newArray });
+    }
+    else{
+      await request (`operation_type/${item.id}/`, 'DELETE');
+      const updatedItems = this.state.items.filter(el => el.id !== item.id);
+      this.setState({ items: updatedItems });
     }
   }
 
