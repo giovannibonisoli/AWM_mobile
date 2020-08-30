@@ -45,22 +45,26 @@ class DetailScreen extends React.Component {
 
   render () {
     return (
-      <View style={{padding: 20}}>
-        <View style={{flexDirection:"row", paddingBottom: 10}}>
-          <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-            <AntDesign name="close" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-        <View style={{alignItems: 'center'}}>
+      <View style={styles.container}>
+        <IconButton iconName="close" onPress={() => this.props.navigation.goBack()}/>
+        <View style={{alignItems: 'center', flexDirection:'row', paddingTop: 20}}>
           <Text style={styles.title}>
             {this.props.route.params.title}
           </Text>
         </View>
         {this.props.route.params.fields.map((field, i) => {
           if (this.props.route.params.item !== undefined & !field.modifiable)
-            return (<DisabledInput key={i} name={field.name} value={this.state[field.field]}/>)
+            return (<DisabledInput key={i}
+                                    style={{paddingTop: 20}}
+                                    name={field.name}
+                                    value={this.state[field.field]}/>)
           else
-            return (<CustomInput key={i} field={field} value={`${this.state[field.field] ? this.state[field.field] : ''}`} onChangeText={this.onChangeTextHandler}/>)
+            return (<CustomInput key={i}
+                                  style={{paddingTop: 20}}
+                                  field={field}
+                                  value={`${this.state[field.field] ? this.state[field.field] : ''}`}
+                                  onChangeText={this.onChangeTextHandler}
+                                  labeled/>)
         })}
         {this.props.route.params.item ?
           (<View>
@@ -96,10 +100,17 @@ class DetailScreen extends React.Component {
 };
 
 const styles = {
+  container: {
+    flex: 1,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 40
+  },
   title: {
+    alignItems: 'center',
     fontWeight:"bold",
     fontSize: 30,
-    color:"#000",
+    color:"#000"
   },
   footerView: {
     flexDirection:"row",

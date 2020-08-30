@@ -94,14 +94,15 @@ class VariableDetailScreen extends React.Component {
     const item = this.props.route.params.item;
     const fields = this.props.route.params.fields;
     return (<ScrollView style={styles.container}>
-              <IconButton style={{paddingBottom: 20}} iconName="close" onPress={() => this.props.navigation.goBack()}/>
-              <View style={{alignItems: 'center', flexDirection:'row', paddingBottom: 10}}>
+              <IconButton iconName="close" onPress={() => this.props.navigation.goBack()}/>
+              <View style={{alignItems: 'center', flexDirection:'row', paddingTop: 20}}>
                 <Text style={styles.title}>
                   {`${this.props.route.params.title} "${this.state.name}"`}
                 </Text>
               </View>
-              {item ? (<DisabledInput name="Nome" value={this.state.name}/>)
-                    : (<CustomInput field={{field: "name", name: "Nome"}}
+              {item ? (<DisabledInput style={{paddingTop: 20}} name="Nome" value={this.state.name}/>)
+                    : (<CustomInput style={{paddingTop: 20}}
+                                    field={{field: "name", name: "Nome"}}
                                     value={`${this.state.name ? this.state.name : ''}`}
                                     onChangeText={this.onChangeTextHandler} labeled/>)}
 
