@@ -25,7 +25,7 @@ export class CustomInput extends React.Component {
 
   onChangeDate = (event, selectedDate) => {
     this.setState({show: false});
-    const value = `${selectedDate.getFullYear()}-${selectedDate.getMonth()}-${selectedDate.getDate()}`
+    const value = `${selectedDate.getFullYear()}-${selectedDate.getMonth()+1}-${selectedDate.getDate()}`
     this.props.onChangeText(this.props.field.field, value);
   }
 
@@ -87,7 +87,7 @@ export class CustomInput extends React.Component {
 export class DisabledInput extends React.Component {
   render(){
     return (
-      <View>
+      <View style={this.props.style}>
         <Text style={styles.inputLabel}>{this.props.name}</Text>
         <View style={{...styles.inputView, backgroundColor: 'lightgray'}} >
           <Text style={styles.inputText}>{this.props.value}</Text>
