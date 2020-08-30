@@ -93,7 +93,6 @@ class VariableDetailScreen extends React.Component {
   render(){
     const item = this.props.route.params.item;
     const fields = this.props.route.params.fields;
-    console.log(this.props.route.params.detail);
     return (<ScrollView style={styles.container}>
               <IconButton style={{paddingBottom: 20}} iconName="close" onPress={() => this.props.navigation.goBack()}/>
               <View style={{alignItems: 'center', flexDirection:'row', paddingBottom: 10}}>

@@ -36,9 +36,9 @@ class OperationScreen extends React.Component {
 
   objectName = "";
 
-  addItem = async (item) => {
+  addItem = async (item, action) => {
     let serializedItem = serializeFields(item, this.state.schema);
-    serializedItem.type = this.props.match.params.name;
+    serializedItem.type = this.props.route.params.operationID;
     let newItem = await request(`operation/${this.props.route.params.operationID}/`, 'POST', serializedItem);
     this.setState(prevState => ({
       items: [...prevState.items, deserializeFields(newItem, "values")]
@@ -46,11 +46,10 @@ class OperationScreen extends React.Component {
 
   }
 
-  updateDeleteItem = async (item) => {
-
+  updateDeleteItem = async (item, action) => {
     if(action === 'PUT'){
       let serializedItem = serializeFields(item, this.state.schema);
-      serializedItem.type = this.props.match.params.name;
+      serializedItem.type = this.props.route.params.operationID;
       let updatedItem = await request (`operation/${this.props.route.params.operationID}/${item.id}/`, 'PUT', serializedItem);
 
       const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
@@ -66,7 +65,7 @@ class OperationScreen extends React.Component {
     }
     else{
       await request (`operation/${this.props.route.params.operationID}/${item.id}/`, 'DELETE');
-      const updatedItems = this.state.items.filter(el => el.id !== itemid);
+      const updatedItems = this.state.items.filter(el => el.id !== item.id);
       this.setState({ items: updatedItems });
     }
   }
@@ -86,7 +85,6 @@ class OperationScreen extends React.Component {
   }
 
   render() {
-    console.log(this.props.route.params)
     return (
       <View style={{width: '100%', height: '100%'}}>
         <Header name={this.props.route.params.operationName} openDrawer={this.props.navigation.openDrawer}/>

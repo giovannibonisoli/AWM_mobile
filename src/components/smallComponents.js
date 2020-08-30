@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import { Ionicons, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-community/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export class Header extends React.Component {
   render(){
@@ -17,31 +18,67 @@ export class Header extends React.Component {
 }
 
 export class CustomInput extends React.Component {
+  state = {
+    show: false,
+    date: new Date(1598051730000)
+  }
+
+  onChangeDate = (event, selectedDate) => {
+    this.setState({show: false});
+    const value = `${selectedDate.getFullYear()}-${selectedDate.getMonth()}-${selectedDate.getDate()}`
+    this.props.onChangeText(this.props.field.field, value);
+  }
+
   render(){
-    const type = this.props.field.type;
+    if(this.props.field.type ==="select"){
+      return (
+        <View style={{...this.props.style}}>
+          {this.props.labeled ? (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)
+                              : (<View></View>)}
+          <View style={{...styles.inputView, backgroundColor: 'white'}} >
+            <Picker style={{color:"#000", fontSize: 17, padding: 34}}
+                          selectedValue={this.props.value}
+                          onValueChange={(itemValue, itemIndex) =>
+                            this.props.onChangeText(this.props.field.field, itemValue)
+                          }>
+                          {this.props.field.options.map((option, i) =>
+                            (<Picker.Item key={i} label={option.label} value={option.value} />))}
+            </Picker>
+          </View>
+        </View>)
+    }
+    if (this.props.field.type === "date"){
+      return (
+        <View style={{...this.props.style}}>
+          {this.props.labeled ? (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)
+                              : (<View></View>)}
+          <TouchableOpacity style={{...styles.inputView, backgroundColor: 'white'}} onPress={() => this.setState({show: true})}>
+            <Text style={styles.inputText}>{this.props.value}</Text>
+          </TouchableOpacity>
+          {this.state.show && <DateTimePicker style={{color:"#000", fontSize: 17, padding: 34}}
+                          testID="dateTimePicker"
+                          value={this.state.date}
+                          mode="date"
+                          is24Hour={true}
+                          display="default"
+                          //onChange={text => this.props.onChangeText(this.props.field.field, text)} />
+                          onChange={this.onChangeDate} />}
+
+        </View>
+      )
+    }
     return (
       <View style={{...this.props.style}}>
         {this.props.labeled ? (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)
                             : (<View></View>)}
         <View style={{...styles.inputView, backgroundColor: 'white'}} >
-        {this.props.field.type ==="select" ?
-          (<Picker style={{color:"#000", fontSize: 17, padding: 34}}
-            selectedValue={this.props.value}
-            onValueChange={(itemValue, itemIndex) =>
-              this.props.onChangeText(this.props.field.field, itemValue)
-            }>
-            {this.props.field.options.map((option, i) =>
-              (<Picker.Item key={i} label={option.label} value={option.value} />))}
-          </Picker>)
-          :
-          (<TextInput style={styles.inputText}
+          <TextInput style={styles.inputText}
                       placeholder={this.props.field.name}
                       placeholderTextColor="#003f5c"
                       //keyboardType={this.props.field.type}
                       secureTextEntry={this.props.field.secure}
                       value={this.props.value}
                       onChangeText={text => this.props.onChangeText(this.props.field.field, text)} />
-          )}
         </View>
       </View>
     )}

@@ -34,7 +34,6 @@ class OperationTypeScreen extends React.Component {
   }
 
   updateDeleteItem = async (item, action) => {
-    console.log(item, action);
     if(action === 'PUT'){
       item.schema = JSON.stringify(item.schema);
       let updatedItem = await request (`operation_type/${item.id}/`, 'PUT', item);
