@@ -135,7 +135,7 @@ class VariableDetailScreen extends React.Component {
               {this.props.route.params.item ?
                 (<View>
                   <View style={styles.footerView}>
-                    <IconButton iconName="check" label="Modifica" onPress={() => this.submitForm('PUT')}/>
+                    <IconButton style={{paddingRight: 20}} iconName="check" label="Modifica" onPress={() => this.submitForm('PUT')}/>
                     <IconButton iconName="delete" label="Elimina" onPress={() => {
                                                                                   Alert.alert(
                                                                                             'Conferma',

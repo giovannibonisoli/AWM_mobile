@@ -8,29 +8,7 @@ import { serializeFields, deserializeFields } from '../helpers/variableObjects';
 
 class OperationScreen extends React.Component {
   state = {
-    schema: [
-              {
-                field: 'id',
-                name: `Codice Operazione`,
-                type: 'number',
-                fixed: true,
-                modifiable: false
-              },
-              {
-                field: 'date',
-                name: 'Data',
-                type: 'date',
-                fixed: true,
-                modifiable: true
-              },
-              {
-                field: 'barrel',
-                name: 'Barile',
-                type: 'barrel',
-                fixed: true,
-                modifiable: true
-              }
-            ],
+    schema: [],
     items: []
   }
 
@@ -70,7 +48,30 @@ class OperationScreen extends React.Component {
     }
   }
 
-  async componentDidMount(){
+  changeSchema = async () => {
+    this.setState({schema: [
+                            {
+                              field: 'id',
+                              name: `Codice Operazione`,
+                              type: 'number',
+                              fixed: true,
+                              modifiable: false
+                            },
+                            {
+                              field: 'date',
+                              name: 'Data',
+                              type: 'date',
+                              fixed: true,
+                              modifiable: true
+                            },
+                            {
+                              field: 'barrel',
+                              name: 'Barile',
+                              type: 'barrel',
+                              fixed: true,
+                              modifiable: true
+                            }
+                          ]});
     let type = await request(`operation_type/${this.props.route.params.operationID}/`, 'GET');
     this.objectName = type.name;
     let schema = JSON.parse(type.schema);
@@ -82,6 +83,17 @@ class OperationScreen extends React.Component {
     let items = await request(`operation/${this.props.route.params.operationID}/`, 'GET');
     items = items.map(item => deserializeFields(item, "values"));
     this.setState({items: items});
+  }
+
+  async componentDidUpdate(prevProps){
+    if(this.props.route.params.operationID !== prevProps.route.params.operationID){
+      this.setState({items: [], schema: []})
+      this.changeSchema();
+    }
+  }
+
+  async componentDidMount(){
+    this.changeSchema();
   }
 
   render() {

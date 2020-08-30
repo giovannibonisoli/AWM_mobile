@@ -45,7 +45,7 @@ class DetailScreen extends React.Component {
 
   render () {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <IconButton iconName="close" onPress={() => this.props.navigation.goBack()}/>
         <View style={{alignItems: 'center', flexDirection:'row', paddingTop: 20}}>
           <Text style={styles.title}>
@@ -69,7 +69,7 @@ class DetailScreen extends React.Component {
         {this.props.route.params.item ?
           (<View>
             <View style={styles.footerView}>
-              <IconButton iconName="check" label="Modifica" onPress={() => this.submitForm('PUT')}/>
+              <IconButton style={{paddingRight: 20}} iconName="check" label="Modifica" onPress={() => this.submitForm('PUT')}/>
               <IconButton iconName="delete" label="Elimina" onPress={() => {
                                                                             Alert.alert(
                                                                                       'Conferma',
@@ -83,19 +83,19 @@ class DetailScreen extends React.Component {
                                                                             }}/>
             </View>
             <View style={styles.footerView}>
-              {this.props.route.params.details ?
+              {this.props.route.params.details &&
                 (<IconButton iconName="arrowright"
                               label={this.props.route.params.details[1]}
                               onPress={() => this.props.navigation.navigate(this.props.route.params.details[0],
                                                                             {setID: this.props.route.params.item.id })}/>
-                    ) : (<View></View>)}
+                    )}
             </View>
           </View>)
           :
           (<View style={styles.footerView}>
             <IconButton iconName="check" label="Aggiungi" onPress={() => this.submitForm('ADD')}/>
           </View>)}
-      </View>
+      </ScrollView>
     )}
 };
 
