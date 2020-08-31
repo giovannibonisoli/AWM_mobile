@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 
 import {CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
-import { validate, alertError } from '../helpers/FormValidation';
+import { validate, validateSchema } from '../helpers/FormValidation';
 
 class VariableDetailScreen extends React.Component {
   state = {
@@ -49,13 +49,17 @@ class VariableDetailScreen extends React.Component {
   };
 
   submitForm = (action) => {
-      this.props.route.params.action({
-        id : this.state.id,
-        name: this.state.name,
-        description: this.state.description,
-        schema: this.state.schema
-      }, action);
-      this.props.navigation.goBack();
+    if(validate([{field: "name", name: "Name"}, {field: "description", name: "Descrizione"}], this.state)){
+      if(validateSchema(this.state.schema)){
+        this.props.route.params.action({
+          id : this.state.id,
+          name: this.state.name,
+          description: this.state.description,
+          schema: this.state.schema
+        }, action);
+        this.props.navigation.goBack();
+      }
+    }
   };
 
   componentDidUpdate(prevProps){
@@ -65,7 +69,7 @@ class VariableDetailScreen extends React.Component {
           id : "",
           name: "",
           description: "",
-          schema: []
+          schema: [{ field:"", name: "", type: ""}]
         });
       }
       else{
@@ -97,7 +101,7 @@ class VariableDetailScreen extends React.Component {
               <IconButton iconName="close" onPress={() => this.props.navigation.goBack()}/>
               <View style={{alignItems: 'center', flexDirection:'row', paddingTop: 20}}>
                 <Text style={styles.title}>
-                  {`${this.props.route.params.title} "${this.state.name}"`}
+                  {`${this.props.route.params.title} `}
                 </Text>
               </View>
               {item ? (<DisabledInput style={{paddingTop: 20}} name="Nome" value={this.state.name}/>)

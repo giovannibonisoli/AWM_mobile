@@ -17,3 +17,14 @@ export const validate = (fields, values) => {
 
   return true;
 }
+
+export const validateSchema = (schema) => {
+  for(let [i, field] of schema.entries()) {
+    if (field.name === ""){
+      alertError("Errore", `Il campo variabile ${i + 1} risulta senza nome`);
+      return false;
+    }
+  }
+
+  return true;
+}
