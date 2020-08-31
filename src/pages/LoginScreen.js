@@ -57,6 +57,7 @@ class LoginScreen extends React.Component {
         </View>
         {this.fields.map((field, i) => (
           <CustomInput key={i}
+                        style={{paddingTop: 20}}
                         field={field}
                         value={`${this.state[field.field] ? this.state[field.field] : ''}`}
                         onChangeText={this.onChangeTextHandler} labeled/>
