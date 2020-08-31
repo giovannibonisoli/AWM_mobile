@@ -15,7 +15,7 @@ class RootNavigator extends React.Component {
         <StatusBar hidden />
         <Stack.Navigator {...this.props} headerMode='none'>
           <Stack.Screen
-            name="Login"
+            name="login"
             component={LoginScreen}
             options={{
               title: 'Login'

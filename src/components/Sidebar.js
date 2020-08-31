@@ -6,7 +6,7 @@ const Item = ({ item, navigate }) => {
 
   return (
     <TouchableOpacity style={styles.listItem} onPress={()=>navigate(item.name)}>
-      <Image source={item.icon} style={{width: '10%', height: '56%'}}/>
+      {item.icon}
       <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
   );

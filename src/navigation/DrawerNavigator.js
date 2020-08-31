@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { Image } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import BarrelSetScreen from '../pages/BarrelSetScreen';
 import BarrelScreen from '../pages/BarrelScreen';
@@ -7,6 +9,7 @@ import OperationTypeScreen from '../pages/OperationTypeScreen';
 import OperationScreen from '../pages/OperationScreen';
 import DetailScreen from '../pages/DetailScreen';
 import VariableDetailScreen from '../pages/VariableDetailScreen';
+import LogoutScreen from '../pages/LogoutScreen';
 import Sidebar from '../components/Sidebar';
 
 const Drawer = createDrawerNavigator();
@@ -19,7 +22,7 @@ class DrawerNavigator extends React.Component {
           title: "Batterie e Barili",
           component: BarrelSetScreen,
           show: true,
-          icon: require("../static/barrel.png")
+          icon: <Image source={require("../static/barrel.png")} style={{width: '10%', height: '56%'}}/>
         },
         {
           name: "barrel",
@@ -32,7 +35,7 @@ class DrawerNavigator extends React.Component {
           title: "Tipi di Operazione",
           component: OperationTypeScreen,
           show: true,
-          icon: require("../static/operation.png")
+          icon: <Image source={require("../static/operation.png")} style={{width: '10%', height: '56%'}}/>
         },
         {
           name: "operation",
@@ -52,7 +55,13 @@ class DrawerNavigator extends React.Component {
           component: VariableDetailScreen,
           show: false
         },
-
+        {
+          name: "logout",
+          title: "Esci",
+          component: LogoutScreen,
+          show: true,
+          icon: <MaterialCommunityIcons name="logout" size={24} color="black" />
+        }
     ]
   }
   render(){

@@ -6,7 +6,6 @@ import AuthService from '../services/auth.service';
 import { validate, alertError } from '../helpers/FormValidation';
 
 
-
 class LoginScreen extends React.Component {
   state = {
     username: "",
