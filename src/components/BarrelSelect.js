@@ -5,7 +5,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { Picker } from '@react-native-community/picker';
 
 import IconButton from './IconButton';
-import CustomInput from './CustomInput';
 
 import { request } from '../helpers/requests';
 
@@ -46,6 +45,7 @@ class BarrelSelect extends React.Component {
         }
       }
       else{
+        console.log('inizio', this.state.barrels[0]);
         if(this.state.selectedSet == null && this.state.selectedBarrel){
           this.setState({
                           selectedSet: this.state.barrels[0].barrel_set,
@@ -64,33 +64,25 @@ class BarrelSelect extends React.Component {
           transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={this.showModal}>
-            <CustomInput style={{width: '45%', PaddingTop: 20}}
-                          field={{
-                                  name: "Batteria",
-                                  type: "select",
-                                  options: this.state.sets.map((set, i) => ({
-                                                                              label: set.id.toString(),
-                                                                              value: set.id
-                                                                            }))
-                                }}
-                          onChangeText={(field, value) => {this.setState({selectedSet: value})}}
-                          value={this.state.selectedSet}
-                          labeled />
-            <CustomInput style={{width: '45%', PaddingTop: 20}}
-                          field={{
-                                  name: "Barile",
-                                  type: "select",
-                                  options: this.state.barrels.filter(barrel => barrel.barrel_set === this.state.selectedSet)
-                                  .map((barrel, i) => ({
-                                                          label: barrel.id,
-                                                          value: barrel.id
-                                                        }))
-                                }}
-                          value={this.state.selectedBarrel}
-                          onChangeText={(field, value) => {this.setState({selectedBarrel: value})}}
-                          labeled/>
 
-            <IconButton iconName="check" label="Modifica" onPress={this.submitBarrel}/>
+          <Text style={styles.inputLabel}>Batteria</Text>
+          <View style={{...styles.inputView, backgroundColor: 'white'}}>
+            <Picker style={{color:"#000", fontSize: 17, padding: 34}}
+                    selectedValue={this.state.selectedSet}
+                    onValueChange={(itemValue, itemIndex) => this.setState({selectedSet: itemValue})}>
+                    {this.state.sets.map((set, i) => (<Picker.Item key={i} label={set.id.toString()} value={set.id} />))}
+            </Picker>
+          </View>
+          <Text style={styles.inputLabel}>Barile</Text>
+          <View style={{...styles.inputView, backgroundColor: 'white'}}>
+            <Picker style={{color:"#000", fontSize: 17, padding: 34}}
+                    selectedValue={this.state.selectedBarrel}
+                    onValueChange={(itemValue, itemIndex) => this.setState({selectedBarrel: itemValue})}>
+                    {this.state.barrels.filter(barrel => barrel.barrel_set === this.state.selectedSet)
+                    .map((barrel, i) => (<Picker.Item key={i} label={barrel.id.toString()} value={barrel.id} />))}
+             </Picker>
+          </View>
+          <IconButton iconName="check" label="Modifica" onPress={this.submitBarrel}/>
         </Modal>
         <TouchableOpacity style={{...styles.inputView, backgroundColor: 'white'}} onPress={this.showModal}>
           <Text style={styles.inputText}>{this.props.value}</Text>
