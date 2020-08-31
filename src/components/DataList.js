@@ -46,7 +46,6 @@ class DataList extends React.Component {
       numFields = 3;
 
     let tdSpace = (Math.round(Dimensions.get('window').width) - 20) / numFields;
-    //const tdSpace = `${Math.floor(100 / this.props.fields.length)}%`;
 
     return (
       <View style={styles.container}>
