@@ -105,11 +105,12 @@ class VariableDetailScreen extends React.Component {
                   {`${this.props.route.params.title} `}
                 </Text>
               </View>
-              {item ? (<DisabledInput style={{paddingTop: 20}} name="Nome" value={this.state.name}/>)
-                    : (<CustomInput style={{paddingTop: 20}}
+              <CustomInput style={{paddingTop: 20}}
                                     field={{field: "name", name: "Nome"}}
                                     value={`${this.state.name ? this.state.name : ''}`}
-                                    onChangeText={this.onChangeTextHandler} labeled/>)}
+                                    onChangeText={this.onChangeTextHandler}
+                                    disabled={this.props.route.params.item !== undefined}
+                                    labeled/>
 
               <CustomInput style={{paddingTop: 20}}
                             field={{field: "description", name: "Descrizione"}}
