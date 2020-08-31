@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-import { CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
+import { CustomInput, DisabledInput } from '../components/smallComponents';
+import IconButton from '../components/IconButton';
 import DataList from '../components/DataList';
 import BarrelSelect from '../components/BarrelSelect';
 import { validate } from '../helpers/FormValidation';

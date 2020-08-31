@@ -77,19 +77,16 @@ export class CustomInput extends React.Component {
     )}
 }
 
-
-export class IconButton extends React.Component {
+export class DisabledInput extends React.Component {
   render(){
-    return (<View style={{...this.props.style, flexDirection:"row"}}>
-              <TouchableOpacity style={{flexDirection:"row", alignItems: 'center'}} onPress={this.props.onPress}>
-                <AntDesign name={this.props.iconName} size={24} color="black" />
-                <Text style={styles.buttonText}>
-                  {this.props.label}
-                </Text>
-              </TouchableOpacity>
-          </View>
-    )
-  }
+    return (
+      <View style={this.props.style}>
+        <Text style={styles.inputLabel}>{this.props.name}</Text>
+        <View style={{...styles.inputView, backgroundColor: 'lightgray'}} >
+          <Text style={styles.inputText}>{this.props.value}</Text>
+        </View>
+      </View>
+    )}
 }
 
 const styles = StyleSheet.create({

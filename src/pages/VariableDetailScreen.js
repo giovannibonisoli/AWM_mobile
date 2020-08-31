@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 
-import {CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
+import { CustomInput, DisabledInput } from '../components/smallComponents';
+import IconButton from '../components/IconButton';
 import { validate, validateSchema } from '../helpers/FormValidation';
 
 class VariableDetailScreen extends React.Component {
