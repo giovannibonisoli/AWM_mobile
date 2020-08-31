@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { Header, CustomInput, DisabledInput, IconButton } from '../components/smallComponents';
 import DataList from '../components/DataList';
+import BarrelSelect from '../components/BarrelSelect';
 import { validate } from '../helpers/FormValidation';
 
 class DetailScreen extends React.Component {
@@ -65,6 +66,7 @@ class DetailScreen extends React.Component {
                                   value={`${this.state[field.field] ? this.state[field.field] : ''}`}
                                   onChangeText={this.onChangeTextHandler}
                                   labeled/>)
+
         })}
         {this.props.route.params.item ?
           (<View>

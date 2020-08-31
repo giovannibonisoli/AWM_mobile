@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, FlatList,
+          TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 
 import { request } from '../helpers/requests';
 
@@ -40,9 +41,17 @@ class DataList extends React.Component {
   }
 
   render() {
-    const tdSpace = `${Math.floor(100 / this.props.fields.length)}%`;
+    let numFields = this.props.fields.length;
+    if(numFields > 3)
+      numFields = 3;
+
+    let tdSpace = (Math.round(Dimensions.get('window').width) - 20) / numFields;
+    //const tdSpace = `${Math.floor(100 / this.props.fields.length)}%`;
+
     return (
       <View style={styles.container}>
+        <ScrollView horizontal>
+        <View>
         <View style={styles.tableRow}>
           {this.props.fields.map((field, i) => (
             <Text key={i} style={{...styles.tH, width: tdSpace}}>{field.name}</Text>
@@ -65,6 +74,8 @@ class DataList extends React.Component {
           )}
           keyExtractor={item => item.id.toString()}
         />
+        </View>
+        </ScrollView>
         <TouchableOpacity onPress={() => this.goToDetail('add')} style={styles.fab}>
           <Text style={styles.fabIcon}>+</Text>
         </TouchableOpacity>
@@ -80,7 +91,6 @@ const styles = StyleSheet.create({
   },
 
   tableRow: {
-    width:"100%",
     backgroundColor: '#fff',
     flexDirection:"row",
     alignItems:"center"
@@ -95,7 +105,6 @@ const styles = StyleSheet.create({
 
   rowDivider:{
     height: 1,
-    width: "100%",
     backgroundColor: "#DCDCDC"
   },
 
