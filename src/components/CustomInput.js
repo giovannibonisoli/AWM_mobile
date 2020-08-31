@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
-import { Ionicons, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { Picker } from '@react-native-community/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import BarrelSelect from './BarrelSelect';
 
-export class CustomInput extends React.Component {
+class CustomInput extends React.Component {
   state = {
     show: false,
     date: new Date(1598051730000)
@@ -19,9 +19,19 @@ export class CustomInput extends React.Component {
   }
 
   render(){
+    if(this.props.disabled){
+      return (
+        <View style={this.props.style}>
+          {this.props.labeled && (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)}
+          <View style={{...styles.inputView, backgroundColor: 'lightgray'}} >
+            <Text style={styles.inputText}>{this.props.value}</Text>
+          </View>
+        </View>
+      )
+    }
     if(this.props.field.type ==="select"){
       return (
-        <View style={{...this.props.style}}>
+        <View style={this.props.style}>
           {this.props.labeled && (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)}
           <View style={{...styles.inputView, backgroundColor: 'white'}} >
             <Picker style={{color:"#000", fontSize: 17, padding: 34}}
@@ -36,7 +46,7 @@ export class CustomInput extends React.Component {
         </View>)
     }
     if (this.props.field.type === "barrel"){
-      return (<View style={{...this.props.style}}>
+      return (<View style={this.props.style}>
                 {this.props.labeled && (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)}
                 <BarrelSelect value={this.props.value}
                               onChange={text => this.props.onChangeText(this.props.field.field, text)}/>
@@ -44,7 +54,7 @@ export class CustomInput extends React.Component {
     }
     if (this.props.field.type === "date"){
       return (
-        <View style={{...this.props.style}}>
+        <View style={this.props.style}>
           {this.props.labeled && (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)}
           <TouchableOpacity style={{...styles.inputView, backgroundColor: 'white'}} onPress={() => this.setState({show: true})}>
             <Text style={styles.inputText}>{this.props.value}</Text>
@@ -62,7 +72,7 @@ export class CustomInput extends React.Component {
       )
     }
     return (
-      <View style={{...this.props.style}}>
+      <View style={this.props.style}>
         {this.props.labeled && (<Text style={styles.inputLabel}>{this.props.field.name}</Text>)}
         <View style={{...styles.inputView, backgroundColor: 'white'}} >
           <TextInput style={styles.inputText}
@@ -77,17 +87,7 @@ export class CustomInput extends React.Component {
     )}
 }
 
-export class DisabledInput extends React.Component {
-  render(){
-    return (
-      <View style={this.props.style}>
-        <Text style={styles.inputLabel}>{this.props.name}</Text>
-        <View style={{...styles.inputView, backgroundColor: 'lightgray'}} >
-          <Text style={styles.inputText}>{this.props.value}</Text>
-        </View>
-      </View>
-    )}
-}
+export default CustomInput;
 
 const styles = StyleSheet.create({
   header: {

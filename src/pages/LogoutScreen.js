@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 
-import { CustomInput} from '../components/smallComponents';
 import AuthService from '../services/auth.service';
 import { validate, alertError } from '../helpers/FormValidation';
 

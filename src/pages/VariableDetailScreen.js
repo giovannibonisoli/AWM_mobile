@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 
-import { CustomInput, DisabledInput } from '../components/smallComponents';
+import CustomInput from '../components/CustomInput';
 import IconButton from '../components/IconButton';
 import { validate, validateSchema } from '../helpers/FormValidation';
 

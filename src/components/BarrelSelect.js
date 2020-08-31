@@ -4,6 +4,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity,
 import { AntDesign } from '@expo/vector-icons';
 import { Picker } from '@react-native-community/picker';
 
+import IconButton from './IconButton'
 import { request } from '../helpers/requests';
 
 class BarrelSelect extends React.Component {
@@ -35,7 +36,6 @@ class BarrelSelect extends React.Component {
     if(this.state.barrels.length !== 0){
       if(this.props.value){
         if(this.props.value !== prevProps.value || this.state.selectedBarrel === null){
-          console.log('chiamato', this.props.value)
           const item = this.state.barrels.filter(barrel => barrel.id === this.props.value)[0];
           this.setState({
                           selectedSet: item.barrel_set,
@@ -79,9 +79,7 @@ class BarrelSelect extends React.Component {
                           .map((barrel, i) => (<Picker.Item key={i} label={barrel.id.toString()} value={barrel.id} />))}
               </Picker>}
             </View>
-            <TouchableOpacity style={{flexDirection:"row", alignItems: 'center'}} onPress={this.submitBarrel}>
-              <AntDesign name="check" size={24} color="black" />
-            </TouchableOpacity>
+            <IconButton iconName="check" label="Modifica" onPress={this.submitBarrel}/>
         </Modal>
         <TouchableOpacity style={{...styles.inputView, backgroundColor: 'white'}} onPress={this.showModal}>
           <Text style={styles.inputText}>{this.props.value}</Text>

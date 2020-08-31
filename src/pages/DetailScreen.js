@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity,
+                      Alert, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-import { CustomInput, DisabledInput } from '../components/smallComponents';
+import CustomInput from '../components/CustomInput';
 import IconButton from '../components/IconButton';
 import DataList from '../components/DataList';
 import BarrelSelect from '../components/BarrelSelect';
@@ -55,35 +56,33 @@ class DetailScreen extends React.Component {
           </Text>
         </View>
         {this.props.route.params.fields.map((field, i) => {
-          if (this.props.route.params.item !== undefined & !field.modifiable)
-            return (<DisabledInput key={i}
-                                    style={{paddingTop: 20}}
-                                    name={field.name}
-                                    value={this.state[field.field]}/>)
-          else
-            return (<CustomInput key={i}
-                                  style={{paddingTop: 20}}
-                                  field={field}
-                                  value={`${this.state[field.field] ? this.state[field.field] : ''}`}
-                                  onChangeText={this.onChangeTextHandler}
-                                  labeled/>)
+          const disabled = (this.props.route.params.item !== undefined && !field.modifiable)
+          return (<CustomInput key={i}
+                                style={{paddingTop: 20}}
+                                field={field}
+                                value={`${this.state[field.field] ? this.state[field.field] : ''}`}
+                                onChangeText={this.onChangeTextHandler}
+                                disabled={disabled}
+                                labeled/>)
 
         })}
         {this.props.route.params.item ?
           (<View>
             <View style={styles.footerView}>
-              <IconButton style={{paddingRight: 20}} iconName="check" label="Modifica" onPress={() => this.submitForm('PUT')}/>
-              <IconButton iconName="delete" label="Elimina" onPress={() => {
-                                                                            Alert.alert(
-                                                                                      'Conferma',
-                                                                                      'Sicuro di voler procedere?',
-                                                                                      [
-                                                                                        {text: 'Yes', onPress: () => this.submitForm('DELETE')},
-                                                                                        {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
-                                                                                      ],
-                                                                                      { cancelable: false }
-                                                                                      );
-                                                                            }}/>
+              <IconButton style={{paddingRight: 20}}
+                          iconName="check"
+                          label="Modifica"
+                          onPress={() => this.submitForm('PUT')}/>
+              <IconButton iconName="delete"
+                          label="Elimina" onPress={() => Alert.alert(
+                                                                      'Conferma',
+                                                                      'Sicuro di voler procedere?',
+                                                                      [
+                                                                        {text: 'Yes', onPress: () => this.submitForm('DELETE')},
+                                                                        {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+                                                                      ],
+                                                                      { cancelable: false }
+                                                                    )}/>
             </View>
             <View style={styles.footerView}>
               {this.props.route.params.details &&
@@ -91,7 +90,8 @@ class DetailScreen extends React.Component {
                               label={this.props.route.params.details[1]}
                               onPress={() => this.props.navigation.navigate(this.props.route.params.details[0],
                                                                             {setID: this.props.route.params.item.id })}/>
-                    )}
+                )
+              }
             </View>
           </View>)
           :
