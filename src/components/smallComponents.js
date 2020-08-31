@@ -6,19 +6,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import BarrelSelect from './BarrelSelect';
 
-export class Header extends React.Component {
-  render(){
-    return (
-        <View style={styles.header}>
-          <TouchableOpacity onPress={this.props.openDrawer}>
-            <Ionicons name="ios-menu" size={32} />
-          </TouchableOpacity>
-          <Text style={{fontWeight:"bold", fontSize: 17}}>{this.props.name}</Text>
-        </View>
-      )
-    }
-}
-
 export class CustomInput extends React.Component {
   state = {
     show: false,
@@ -90,17 +77,6 @@ export class CustomInput extends React.Component {
     )}
 }
 
-export class DisabledInput extends React.Component {
-  render(){
-    return (
-      <View style={this.props.style}>
-        <Text style={styles.inputLabel}>{this.props.name}</Text>
-        <View style={{...styles.inputView, backgroundColor: 'lightgray'}} >
-          <Text style={styles.inputText}>{this.props.value}</Text>
-        </View>
-      </View>
-    )}
-}
 
 export class IconButton extends React.Component {
   render(){

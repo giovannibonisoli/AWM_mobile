@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Header } from '../components/smallComponents';
+import Header from '../components/Header';
 import DataList from '../components/DataList';
 import { request } from '../helpers/requests';
 
