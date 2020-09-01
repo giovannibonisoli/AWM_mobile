@@ -70,7 +70,6 @@ class CustomInput extends React.Component {
                           mode="date"
                           is24Hour={true}
                           display="default"
-                          //onChange={text => this.props.onChangeText(this.props.field.field, text)} />
                           onChange={this.onChangeDate} />}
 
         </View>
