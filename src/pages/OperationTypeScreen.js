@@ -9,22 +9,23 @@ import { get, post, put, del } from '../helpers/requests';
 
 class OperationTypeScreen extends React.Component {
   state = {
-    items: [],
-    fields: [
-              {
-                field: 'name',
-                name: 'Nome',
-                type: 'text',
-                modifiable: true
-              },
-              {
-                field: 'description',
-                name: 'Descrizione',
-                type: 'textArea',
-                modifiable: true
-              }
-            ]
+    items: []
   }
+
+  fields = [
+            {
+              field: 'name',
+              name: 'Nome',
+              type: 'text',
+              modifiable: true
+            },
+            {
+              field: 'description',
+              name: 'Descrizione',
+              type: 'textArea',
+              modifiable: true
+            }
+          ]
 
   addItem = async (item, action) => {
     const token = await AuthService.getToken();
@@ -77,7 +78,7 @@ class OperationTypeScreen extends React.Component {
         <Header name="Tipi di Operazione" openDrawer={this.props.navigation.openDrawer}/>
         <DataList objectName="Tipo di Operazione"
                   items={this.state.items}
-                  fields={this.state.fields}
+                  fields={this.fields}
                   navigate={this.props.navigation.navigate}
                   addAction={this.addItem}
                   updateDeleteAction={this.updateDeleteItem}

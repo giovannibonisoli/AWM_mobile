@@ -10,23 +10,24 @@ import { get, post, put, del } from '../helpers/requests';
 
 class BarrelSetScreen extends React.Component {
   state = {
-    items: [],
-    fields: [
-              {
-                field: 'id',
-                name: 'Numero Batteria',
-                type: 'number',
-                modifiable: false
-              },
-              {
-                field: 'year',
-                name: 'Anno',
-                type: 'number',
-                min: 1984,
-                modifiable: true
-              }
-            ]
+    items: []
   }
+
+  fields = [
+            {
+              field: 'id',
+              name: 'Numero Batteria',
+              type: 'number',
+              modifiable: false
+            },
+            {
+              field: 'year',
+              name: 'Anno',
+              type: 'number',
+              min: 1984,
+              modifiable: true
+            }
+          ]
 
   addItem = async (item, action) => {
     const token = await AuthService.getToken();
@@ -78,7 +79,7 @@ class BarrelSetScreen extends React.Component {
         <Header name="Batterie" openDrawer={this.props.navigation.openDrawer}/>
         <DataList objectName="Batteria"
                   items={this.state.items}
-                  fields={this.state.fields}
+                  fields={this.fields}
                   navigate={this.props.navigation.navigate}
                   addAction={this.addItem}
                   updateDeleteAction={this.updateDeleteItem}
