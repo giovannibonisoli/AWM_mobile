@@ -3,7 +3,9 @@ import { StyleSheet, Button, View } from 'react-native';
 
 import Header from '../components/Header';
 import DataList from '../components/DataList';
-import { request } from '../helpers/requests';
+
+import AuthService from '../services/auth.service';
+import { get, post, put, del } from '../helpers/requests';
 import { serializeFields, deserializeFields } from '../helpers/variableObjects';
 
 class OperationScreen extends React.Component {

@@ -7,6 +7,7 @@ import CustomInput from '../components/CustomInput';
 import IconButton from '../components/IconButton';
 import DataList from '../components/DataList';
 import BarrelSelect from '../components/BarrelSelect';
+
 import { validate } from '../helpers/FormValidation';
 
 class DetailScreen extends React.Component {

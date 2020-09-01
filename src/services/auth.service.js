@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
+import { get, post, put, del } from '../helpers/requests';
+
 class AuthService {
   login = async (username, password) => {
     return fetch("http://10.0.2.2:8000/api/token/", {
@@ -53,12 +55,15 @@ class AuthService {
   }
 
   getCurrentUser = async () => {
-    try{
-      return JSON.parse(await AsyncStorage.getItem('user'));
+    if(this.isLoggedIn()){
+      try{
+        return JSON.parse(await AsyncStorage.getItem('user'));
+      }
+      catch(e){
+        console.error(e);
+      }
     }
-    catch(e){
-      console.error(e);
-    }
+    return false;
   }
 
   checkToken = async () => {
@@ -84,7 +89,6 @@ class AuthService {
       .then(res => {
         this.storeUser(user.name, res.access, user.token.refresh);
       });
-
     }
   }
 }
