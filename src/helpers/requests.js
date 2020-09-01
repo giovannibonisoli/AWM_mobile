@@ -5,7 +5,7 @@ export const get = async (url: string, token: string) => {
 		'Content-Type': 'application/json',
 		Accept: 'application/json'
 	}
-	console.log(token);
+
 	if (token)
 		headers.Authorization = `Bearer ${token}`;
 
