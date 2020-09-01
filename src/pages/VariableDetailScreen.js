@@ -19,7 +19,7 @@ class VariableDetailScreen extends React.Component {
     const newSchema= this.state.schema.map((field, sidx) => {
       if (idx !== sidx) {return field}
       else {
-        if(this.props.item){
+        if(this.props.route.params.item){
           return { ...field, name: text};
         }
         return { ...field, name: text, field: text.toLowerCase().replace(/\s+/g, '')};
@@ -44,7 +44,7 @@ class VariableDetailScreen extends React.Component {
     });
   };
 
-  handleRemoveShareholder = idx => () => {
+  handleRemoveShareholder = idx => {
     this.setState({
       schema: this.state.schema.filter((s, sidx) => idx !== sidx)
     });
@@ -67,19 +67,16 @@ class VariableDetailScreen extends React.Component {
   componentDidUpdate(prevProps){
     if(this.props.route.params.item !== prevProps.route.params.item){
       if (this.props.route.params.item === undefined){
-        this.setState({
-          id : "",
-          name: "",
-          description: "",
-          schema: [{ field:"", name: "", type: ""}]
+        Object.keys(this.state).forEach(key => {
+            this.setState({[key]: undefined})
         });
       }
       else{
-        this.setState({
-          id : this.props.route.params.item.id,
-          name: this.props.route.params.item.name,
-          description: this.props.route.params.item.description,
-          schema: JSON.parse(this.props.route.params.item.schema)
+        Object.keys(this.props.route.params.item).forEach(key => {
+          if(key === "schema")
+            this.setState({schema: JSON.parse(this.props.route.params.item.schema)})
+          else
+            this.setState({[key]: this.props.route.params.item[key]});
         });
       }
     }
@@ -87,11 +84,11 @@ class VariableDetailScreen extends React.Component {
 
   componentDidMount(){
     if(this.props.route.params.item){
-      this.setState({
-        id : this.props.route.params.item.id,
-        name: this.props.route.params.item.name,
-        description: this.props.route.params.item.description,
-        schema: JSON.parse(this.props.route.params.item.schema)
+      Object.keys(this.props.route.params.item).forEach(key => {
+        if(key === "schema")
+          this.setState({schema: JSON.parse(this.props.route.params.item.schema)})
+        else
+          this.setState({[key]: this.props.route.params.item[key]});
       });
     }
   }
@@ -106,39 +103,37 @@ class VariableDetailScreen extends React.Component {
                   {`${this.props.route.params.title} `}
                 </Text>
               </View>
-              <CustomInput style={{paddingTop: 20}}
-                                    field={{field: "name", name: "Nome"}}
-                                    value={`${this.state.name ? this.state.name : ''}`}
-                                    onChangeText={this.onChangeTextHandler}
-                                    disabled={this.props.route.params.item !== undefined}
-                                    labeled/>
-
-              <CustomInput style={{paddingTop: 20}}
-                            field={{field: "description", name: "Descrizione"}}
-                            value={`${this.state.description ? this.state.description : ''}`}
-                            onChangeText={this.onChangeTextHandler} labeled/>
-
-              {this.state.schema.map((field, idx) => (
-                <View key={idx} style={{flexDirection:"row", paddingTop: 20}}>
-                  <CustomInput style={{width: '45%', paddingRight: 10}}
-                                field={field}
-                                value={`${field.name ? field.name : ''}`}
-                                onChangeText={(field, text) => this.handleShareholderNameChange(idx, text)}/>
-                  <CustomInput style={{width: '45%', paddingRight: 10}}
-                                field={{type: "select", options: [
-                                                                  {label: "testo", value: "text"},
-                                                                  {label: "numero", value: "number"},
-                                                                  {label: "barile", value: "barrel"}
-                                                                ]}}
-                                value={`${field.type ? field.type : ''}`}
-                                onChangeText={(field, text) => this.handleShareholderTypeChange(idx, text)}/>
-                  <IconButton style={{justifyContent: 'center'}}
-                              iconName="minus"
-                              onPress={this.handleRemoveShareholder(idx)}/>
-
-                </View>
+              {this.props.route.params.fields.map((field, i) => (
+                <CustomInput key={i}
+                              style={{paddingTop: 20}}
+                              field={field}
+                              value={`${this.state[field.field] ? this.state[field.field] : ''}`}
+                              onChangeText={this.onChangeTextHandler}
+                              disabled={this.props.route.params.item !== undefined && !field.modifiable}
+                              labeled/>
               ))}
-              <IconButton style={{paddingTop: 20}} iconName="plus" onPress={this.handleAddShareholder}/>
+              {this.state.schema && (
+              <View>
+                {this.state.schema.map((field, idx) => (
+                  <View key={idx} style={{flexDirection:"row", paddingTop: 20}}>
+                    <CustomInput style={{width: '45%', paddingRight: 10}}
+                                  field={field}
+                                  value={`${field.name ? field.name : ''}`}
+                                  onChangeText={(field, text) => this.handleShareholderNameChange(idx, text)}/>
+                    <CustomInput style={{width: '45%', paddingRight: 10}}
+                                  field={{type: "select", options: [
+                                                                    {label: "testo", value: "text"},
+                                                                    {label: "numero", value: "number"},
+                                                                    {label: "barile", value: "barrel"}
+                                                                  ]}}
+                                  value={`${field.type ? field.type : ''}`}
+                                  onChangeText={(field, text) => this.handleShareholderTypeChange(idx, text)}/>
+                    <IconButton style={{justifyContent: 'center'}}
+                                iconName="minus"
+                                onPress={() => this.handleRemoveShareholder(idx)}/>
+                  </View>))}
+                <IconButton style={{paddingTop: 20}} iconName="plus" onPress={this.handleAddShareholder}/>
+              </View>)}
               {this.props.route.params.item ?
                 (<FormButtons updateAction={() => this.submitForm('PUT')}
                               deleteAction={() => this.submitForm('DELETE')}
@@ -148,8 +143,7 @@ class VariableDetailScreen extends React.Component {
                                                                                 operationID: this.props.route.params.item.id,
                                                                                 operationName: this.props.route.params.item.name
                                                                               }
-                                                                            )]}/>)
-                :
+                                                                            )]}/>) :
                 (<IconButton style={styles.footerView}
                               iconName="check"
                               label="Aggiungi"

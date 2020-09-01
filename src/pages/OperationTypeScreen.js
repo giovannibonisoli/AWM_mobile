@@ -17,7 +17,7 @@ class OperationTypeScreen extends React.Component {
               field: 'name',
               name: 'Nome',
               type: 'text',
-              modifiable: true
+              modifiable: false
             },
             {
               field: 'description',
