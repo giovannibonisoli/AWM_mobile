@@ -26,14 +26,8 @@ class OperationTypeScreen extends React.Component {
             ]
   }
 
-  getToken = async () => {
-    await AuthService.checkToken();
-    const user = await AuthService.getCurrentUser();
-    return user.token.access;
-  }
-
   addItem = async (item, action) => {
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       item.id = item.name.toLowerCase().replace(/\s/g, '');
       item.schema = JSON.stringify(item.schema);
@@ -45,7 +39,7 @@ class OperationTypeScreen extends React.Component {
   }
 
   updateDeleteItem = async (item, action) => {
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       if(action === 'PUT'){
         item.schema = JSON.stringify(item.schema);
@@ -71,7 +65,7 @@ class OperationTypeScreen extends React.Component {
   }
 
   async componentDidMount() {
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       this.setState({items: await get("operation_type/", token)});
     }

@@ -91,6 +91,12 @@ class AuthService {
       });
     }
   }
+
+  getToken = async () => {
+    await this.checkToken();
+    const user = await this.getCurrentUser();
+    return user.token.access;
+  }
 }
 
 export default new AuthService();

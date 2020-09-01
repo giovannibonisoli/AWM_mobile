@@ -28,14 +28,8 @@ class BarrelSetScreen extends React.Component {
             ]
   }
 
-  getToken = async () => {
-    await AuthService.checkToken();
-    const user = await AuthService.getCurrentUser();
-    return user.token.access;
-  }
-
   addItem = async (item, action) => {
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       let newItem = await post("barrel_set/", item, token);
       this.setState(prevState => ({
@@ -46,7 +40,7 @@ class BarrelSetScreen extends React.Component {
   }
 
   updateDeleteItem = async (item, action) => {
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       if(action === 'PUT'){
         let updatedItem = await put(`barrel_set/${item.id}/`, item, token);
@@ -72,7 +66,7 @@ class BarrelSetScreen extends React.Component {
 
   async componentDidMount() {
 
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       this.setState({items: await get("barrel_set/", token)});
     }

@@ -18,12 +18,6 @@ class BarrelSelect extends React.Component {
     selectedBarrel: null
   }
 
-  getToken = async () => {
-    await AuthService.checkToken();
-    const user = await AuthService.getCurrentUser();
-    return user.token.access;
-  }
-
   showModal = () => {
     this.setState({modalVisible: !this.state.modalVisible});
   }
@@ -34,7 +28,7 @@ class BarrelSelect extends React.Component {
   }
 
   async componentDidMount (){
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       this.setState({
         sets: await get("barrel_set/", token),

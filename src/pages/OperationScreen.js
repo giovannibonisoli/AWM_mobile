@@ -16,14 +16,8 @@ class OperationScreen extends React.Component {
 
   objectName = "";
 
-  getToken = async () => {
-    await AuthService.checkToken();
-    const user = await AuthService.getCurrentUser();
-    return user.token.access;
-  }
-
   addItem = async (item, action) => {
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       let serializedItem = serializeFields(item, this.state.schema);
       serializedItem.type = this.props.route.params.operationID;
@@ -35,7 +29,7 @@ class OperationScreen extends React.Component {
   }
 
   updateDeleteItem = async (item, action) => {
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       if(action === 'PUT'){
         let serializedItem = serializeFields(item, this.state.schema);
@@ -62,7 +56,7 @@ class OperationScreen extends React.Component {
   }
 
   changeSchema = async () => {
-    const token = await this.getToken();
+    const token = await AuthService.getToken();
     if(token){
       this.setState({schema: [
                               {
