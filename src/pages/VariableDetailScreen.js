@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 
+import FormButtons from '../components/FormButtons';
 import CustomInput from '../components/CustomInput';
 import IconButton from '../components/IconButton';
 import { validate, validateSchema } from '../helpers/FormValidation';
@@ -139,35 +140,21 @@ class VariableDetailScreen extends React.Component {
               ))}
               <IconButton style={{paddingTop: 20}} iconName="plus" onPress={this.handleAddShareholder}/>
               {this.props.route.params.item ?
-                (<View>
-                  <View style={styles.footerView}>
-                    <IconButton style={{paddingRight: 20}} iconName="check" label="Modifica" onPress={() => this.submitForm('PUT')}/>
-                    <IconButton iconName="delete" label="Elimina" onPress={() => {
-                                                                                  Alert.alert(
-                                                                                            'Conferma',
-                                                                                            'Sicuro di voler procedere?',
-                                                                                            [
-                                                                                              {text: 'Yes', onPress: () => this.submitForm('DELETE')},
-                                                                                              {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
-                                                                                            ],
-                                                                                            { cancelable: false }
-                                                                                            );
-                                                                                  }}/>
-                  </View>
-                  <View style={styles.footerView}>
-                    {this.props.route.params.details ?
-                      (<IconButton iconName="arrowright"
-                                    label={this.props.route.params.details[1]}
-                                    onPress={() => this.props.navigation.navigate(this.props.route.params.details[0],
-                                                                                  {operationID: this.props.route.params.item.id,
-                                                                                    operationName: this.props.route.params.item.name })}/>
-                          ) : (<View></View>)}
-                  </View>
-                </View>)
+                (<FormButtons updateAction={() => this.submitForm('PUT')}
+                              deleteAction={() => this.submitForm('DELETE')}
+                              details={[this.props.route.params.details[1],
+                                        () => this.props.navigation.navigate(this.props.route.params.details[0],
+                                                                              {
+                                                                                operationID: this.props.route.params.item.id,
+                                                                                operationName: this.props.route.params.item.name
+                                                                              }
+                                                                            )]}/>)
                 :
-                (<View style={{...styles.footerView}}>
-                  <IconButton iconName="check" label="Aggiungi" onPress={() => this.submitForm('ADD')}/>
-                </View>)}
+                (<IconButton style={styles.footerView}
+                              iconName="check"
+                              label="Aggiungi"
+                              onPress={() => this.submitForm('ADD')}/>
+                )}
             </ScrollView>);
   }
 
