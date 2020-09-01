@@ -45,7 +45,6 @@ class BarrelSelect extends React.Component {
         }
       }
       else{
-        console.log('inizio', this.state.barrels[0]);
         if(this.state.selectedSet == null && this.state.selectedBarrel){
           this.setState({
                           selectedSet: this.state.barrels[0].barrel_set,

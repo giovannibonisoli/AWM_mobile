@@ -12,6 +12,11 @@ class CustomInput extends React.Component {
     date: new Date(1598051730000)
   }
 
+  KayboardTypes = {
+    text: "default",
+    number: "numeric",
+  }
+
   onChangeDate = (event, selectedDate) => {
     this.setState({show: false});
     const value = `${selectedDate.getFullYear()}-${selectedDate.getMonth()+1}-${selectedDate.getDate()}`
@@ -78,8 +83,8 @@ class CustomInput extends React.Component {
           <TextInput style={styles.inputText}
                       placeholder={this.props.field.name}
                       placeholderTextColor="#003f5c"
-                      //keyboardType={this.props.field.type}
-                      secureTextEntry={this.props.field.secure}
+                      keyboardType={this.KayboardTypes[this.props.field.type]}
+                      secureTextEntry={this.props.field.type === "password"}
                       value={this.props.value}
                       onChangeText={text => this.props.onChangeText(this.props.field.field, text)} />
         </View>
