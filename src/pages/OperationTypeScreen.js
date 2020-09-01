@@ -26,40 +26,55 @@ class OperationTypeScreen extends React.Component {
             ]
   }
 
+  getToken = async () => {
+    await AuthService.checkToken();
+    const user = await AuthService.getCurrentUser();
+    return user.token.access;
+  }
+
   addItem = async (item, action) => {
-    item.id = item.name.toLowerCase().replace(/\s/g, '');
-    item.schema = JSON.stringify(item.schema);
-    let newItem = await request("operation_type/", 'POST', item);
-    this.setState(prevState => ({
-      items: [...prevState.items, newItem]
-    }));
+    const token = await this.getToken();
+    if(token){
+      item.id = item.name.toLowerCase().replace(/\s/g, '');
+      item.schema = JSON.stringify(item.schema);
+      let newItem = await post("operation_type/", item, token);
+      this.setState(prevState => ({
+        items: [...prevState.items, newItem]
+      }));
+    }
   }
 
   updateDeleteItem = async (item, action) => {
-    if(action === 'PUT'){
-      item.schema = JSON.stringify(item.schema);
-      let updatedItem = await request (`operation_type/${item.id}/`, 'PUT', item);
+    const token = await this.getToken();
+    if(token){
+      if(action === 'PUT'){
+        item.schema = JSON.stringify(item.schema);
+        let updatedItem = await put (`operation_type/${item.id}/`, item, token);
 
-      const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
-      const newArray = [
-        // destructure all items from beginning to the indexed item
-        ...this.state.items.slice(0, itemIndex),
-        // add the updated item to the array
-        updatedItem,
-        // add the rest of the items to the array from the index after the replaced item
-        ...this.state.items.slice(itemIndex + 1)
-      ]
-      this.setState({ items: newArray });
-    }
-    else{
-      await request (`operation_type/${item.id}/`, 'DELETE');
-      const updatedItems = this.state.items.filter(el => el.id !== item.id);
-      this.setState({ items: updatedItems });
+        const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+        const newArray = [
+          // destructure all items from beginning to the indexed item
+          ...this.state.items.slice(0, itemIndex),
+          // add the updated item to the array
+          updatedItem,
+          // add the rest of the items to the array from the index after the replaced item
+          ...this.state.items.slice(itemIndex + 1)
+        ]
+        this.setState({ items: newArray });
+      }
+      else{
+        await del (`operation_type/${item.id}/`, token);
+        const updatedItems = this.state.items.filter(el => el.id !== item.id);
+        this.setState({ items: updatedItems });
+      }
     }
   }
 
   async componentDidMount() {
-    this.setState({items: await request("operation_type/", 'GET')});
+    const token = await this.getToken();
+    if(token){
+      this.setState({items: await get("operation_type/", token)});
+    }
   }
 
   render () {

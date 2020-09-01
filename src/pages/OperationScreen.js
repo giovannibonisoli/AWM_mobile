@@ -16,75 +16,89 @@ class OperationScreen extends React.Component {
 
   objectName = "";
 
-  addItem = async (item, action) => {
-    let serializedItem = serializeFields(item, this.state.schema);
-    serializedItem.type = this.props.route.params.operationID;
-    let newItem = await request(`operation/${this.props.route.params.operationID}/`, 'POST', serializedItem);
-    this.setState(prevState => ({
-      items: [...prevState.items, deserializeFields(newItem, "values")]
-    }))
+  getToken = async () => {
+    await AuthService.checkToken();
+    const user = await AuthService.getCurrentUser();
+    return user.token.access;
+  }
 
+  addItem = async (item, action) => {
+    const token = await this.getToken();
+    if(token){
+      let serializedItem = serializeFields(item, this.state.schema);
+      serializedItem.type = this.props.route.params.operationID;
+      let newItem = await post(`operation/${this.props.route.params.operationID}/`, serializedItem, token);
+      this.setState(prevState => ({
+        items: [...prevState.items, deserializeFields(newItem, "values")]
+      }))
+    }
   }
 
   updateDeleteItem = async (item, action) => {
-    if(action === 'PUT'){
-      let serializedItem = serializeFields(item, this.state.schema);
-      serializedItem.type = this.props.route.params.operationID;
-      let updatedItem = await request (`operation/${this.props.route.params.operationID}/${item.id}/`, 'PUT', serializedItem);
+    const token = await this.getToken();
+    if(token){
+      if(action === 'PUT'){
+        let serializedItem = serializeFields(item, this.state.schema);
+        serializedItem.type = this.props.route.params.operationID;
+        let updatedItem = await put (`operation/${this.props.route.params.operationID}/${item.id}/`, serializedItem, token);
 
-      const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
-      const newArray = [
-        // destructure all items from beginning to the indexed item
-        ...this.state.items.slice(0, itemIndex),
-        // add the updated item to the array
-        deserializeFields(updatedItem, "values"),
-        // add the rest of the items to the array from the index after the replaced item
-        ...this.state.items.slice(itemIndex + 1)
-        ]
-        this.setState({ items: newArray });
-    }
-    else{
-      await request (`operation/${this.props.route.params.operationID}/${item.id}/`, 'DELETE');
-      const updatedItems = this.state.items.filter(el => el.id !== item.id);
-      this.setState({ items: updatedItems });
+        const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+        const newArray = [
+          // destructure all items from beginning to the indexed item
+          ...this.state.items.slice(0, itemIndex),
+          // add the updated item to the array
+          deserializeFields(updatedItem, "values"),
+          // add the rest of the items to the array from the index after the replaced item
+          ...this.state.items.slice(itemIndex + 1)
+          ]
+          this.setState({ items: newArray });
+      }
+      else{
+        await del (`operation/${this.props.route.params.operationID}/${item.id}/`, token);
+        const updatedItems = this.state.items.filter(el => el.id !== item.id);
+        this.setState({ items: updatedItems });
+      }
     }
   }
 
   changeSchema = async () => {
-    this.setState({schema: [
-                            {
-                              field: 'id',
-                              name: `Codice Operazione`,
-                              type: 'number',
-                              fixed: true,
-                              modifiable: false
-                            },
-                            {
-                              field: 'date',
-                              name: 'Data',
-                              type: 'date',
-                              fixed: true,
-                              modifiable: true
-                            },
-                            {
-                              field: 'barrel',
-                              name: 'Barile',
-                              type: 'barrel',
-                              fixed: true,
-                              modifiable: true
-                            }
-                          ]});
-    let type = await request(`operation_type/${this.props.route.params.operationID}/`, 'GET');
-    this.objectName = type.name;
-    let schema = JSON.parse(type.schema);
-    schema.forEach((item, i) => {
-      item.modifiable = true;
-    })
-    this.setState({schema: [...this.state.schema, ...schema]});
+    const token = await this.getToken();
+    if(token){
+      this.setState({schema: [
+                              {
+                                field: 'id',
+                                name: `Codice Operazione`,
+                                type: 'number',
+                                fixed: true,
+                                modifiable: false
+                              },
+                              {
+                                field: 'date',
+                                name: 'Data',
+                                type: 'date',
+                                fixed: true,
+                                modifiable: true
+                              },
+                              {
+                                field: 'barrel',
+                                name: 'Barile',
+                                type: 'barrel',
+                                fixed: true,
+                                modifiable: true
+                              }
+                            ]});
+      let type = await get(`operation_type/${this.props.route.params.operationID}/`, token);
+      this.objectName = type.name;
+      let schema = JSON.parse(type.schema);
+      schema.forEach((item, i) => {
+        item.modifiable = true;
+      })
+      this.setState({schema: [...this.state.schema, ...schema]});
 
-    let items = await request(`operation/${this.props.route.params.operationID}/`, 'GET');
-    items = items.map(item => deserializeFields(item, "values"));
-    this.setState({items: items});
+      let items = await get(`operation/${this.props.route.params.operationID}/`, token);
+      items = items.map(item => deserializeFields(item, "values"));
+      this.setState({items: items});
+    }
   }
 
   async componentDidUpdate(prevProps){

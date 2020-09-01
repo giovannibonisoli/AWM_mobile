@@ -6,7 +6,8 @@ import { Picker } from '@react-native-community/picker';
 
 import IconButton from './IconButton';
 
-import { request } from '../helpers/requests';
+import AuthService from '../services/auth.service';
+import { get } from '../helpers/requests';
 
 class BarrelSelect extends React.Component {
   state = {
@@ -15,6 +16,12 @@ class BarrelSelect extends React.Component {
     barrels: [],
     selectedSet: null,
     selectedBarrel: null
+  }
+
+  getToken = async () => {
+    await AuthService.checkToken();
+    const user = await AuthService.getCurrentUser();
+    return user.token.access;
   }
 
   showModal = () => {
@@ -27,10 +34,13 @@ class BarrelSelect extends React.Component {
   }
 
   async componentDidMount (){
-    this.setState({
-      sets: await request("barrel_set/", 'GET'),
-      barrels: await request("barrel/", 'GET')
-    });
+    const token = await this.getToken();
+    if(token){
+      this.setState({
+        sets: await get("barrel_set/", token),
+        barrels: await get("barrel/", token)
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
