@@ -88,8 +88,6 @@ class ItemScreen extends React.Component {
   }
 
   componentDidUpdate(prevProps){
-    console.log('update');
-    console.log(this.state);
     if(this.props.route.params.item !== prevProps.route.params.item){
       console.log('inizializza');
       this.resetState();
@@ -123,7 +121,7 @@ class ItemScreen extends React.Component {
                 {this.state.schema.map((field, idx) => (
                     <View key={idx} style={{flexDirection:"row", paddingTop: 20}}>
                       <CustomInput style={{width: '45%', paddingRight: 10}}
-                                    field={{field: field.field, type: "default" }}
+                                    field={{type: "default" }}
                                     value={`${field.name ? field.name : ''}`}
                                     onChangeText={(field, text) => this.handleShareholderNameChange(idx, text)}/>
                       <CustomInput style={{width: '45%', paddingRight: 10}}
