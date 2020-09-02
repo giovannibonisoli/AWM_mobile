@@ -49,40 +49,50 @@ class ItemScreen extends React.Component {
   };
 
   submitForm = (action) => {
-    let validation = false;
-    validation = validate(this.props.route.params.fields, this.state);
+    let finalItem = this.state;
+    let validation = true;
 
-    if(this.props.route.params.variable)
-      validation = validation && validateSchema(this.state.schema);
+    if(this.props.route.params.variable){
+      validation = validation && validateSchema(finalItem.schema);
+    }
 
+    validation = validation && validate(this.props.route.params.fields, finalItem);
     if(validation){
-      this.props.route.params.action(this.state, action);
+      this.props.route.params.action(finalItem, action);
       this.props.navigation.goBack();
     }
   };
 
-  initializeState = () => {
-    Object.keys(this.state).forEach(key => {
-      this.setState({[key]: undefined})
-    });
 
+  initializeState = () => {
     if (this.props.route.params.item === undefined){
-      if (this.props.route.params.variable){
+      if (this.props.route.params.variable)
         this.setState({schema: [{ field:"", name: "", type: ""}]})
-      }
+      else
+        this.setState({schema: undefined})
     }
     else{
       Object.keys(this.props.route.params.item).forEach(key => {
-        if(key === "schema")
-          this.setState({schema: JSON.parse(this.props.route.params.item.schema)})
-        else
-          this.setState({[key]: this.props.route.params.item[key]});
+        this.setState({[key]: this.props.route.params.item[key]});
       });
+      if (this.props.route.params.variable){
+        this.setState({schema: JSON.parse(this.props.route.params.item.schema)});
+      }
     }
   }
 
+  resetState = () => {
+    Object.keys(this.state).forEach(key => {
+        this.setState({[key]: undefined})
+    });
+  }
+
   componentDidUpdate(prevProps){
+    console.log('update');
+    console.log(this.state);
     if(this.props.route.params.item !== prevProps.route.params.item){
+      console.log('inizializza');
+      this.resetState();
       this.initializeState();
     }
   }
@@ -111,23 +121,24 @@ class ItemScreen extends React.Component {
               {this.state.schema && (
               <View>
                 {this.state.schema.map((field, idx) => (
-                  <View key={idx} style={{flexDirection:"row", paddingTop: 20}}>
-                    <CustomInput style={{width: '45%', paddingRight: 10}}
-                                  field={field}
-                                  value={`${field.name ? field.name : ''}`}
-                                  onChangeText={(field, text) => this.handleShareholderNameChange(idx, text)}/>
-                    <CustomInput style={{width: '45%', paddingRight: 10}}
-                                  field={{type: "select", options: [
-                                                                    {label: "testo", value: "text"},
-                                                                    {label: "numero", value: "number"},
-                                                                    {label: "barile", value: "barrel"}
-                                                                  ]}}
-                                  value={`${field.type ? field.type : ''}`}
-                                  onChangeText={(field, text) => this.handleShareholderTypeChange(idx, text)}/>
-                    <IconButton style={{justifyContent: 'center'}}
-                                iconName="minus"
-                                onPress={() => this.handleRemoveShareholder(idx)}/>
-                  </View>))}
+                    <View key={idx} style={{flexDirection:"row", paddingTop: 20}}>
+                      <CustomInput style={{width: '45%', paddingRight: 10}}
+                                    field={{field: field.field, type: "default" }}
+                                    value={`${field.name ? field.name : ''}`}
+                                    onChangeText={(field, text) => this.handleShareholderNameChange(idx, text)}/>
+                      <CustomInput style={{width: '45%', paddingRight: 10}}
+                                    field={{type: "select", options: [
+                                                                      {label: "testo", value: "text"},
+                                                                      {label: "numero", value: "number"},
+                                                                      {label: "barile", value: "barrel"}
+                                                                    ]}}
+                                    value={`${field.type ? field.type : ''}`}
+                                    onChangeText={(field, text) => this.handleShareholderTypeChange(idx, text)}/>
+                      <IconButton style={{justifyContent: 'center'}}
+                                  iconName="minus"
+                                  onPress={() => this.handleRemoveShareholder(idx)}/>
+                    </View>)
+                )}
                 <IconButton style={{paddingTop: 20}} iconName="plus" onPress={this.handleAddShareholder}/>
               </View>)}
               {this.props.route.params.item ?
@@ -165,8 +176,6 @@ const styles = {
     justifyContent: 'center',
     paddingTop: 20
   }
-
-
 };
 
 export default ItemScreen;

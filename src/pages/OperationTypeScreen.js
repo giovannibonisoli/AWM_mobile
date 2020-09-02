@@ -35,7 +35,6 @@ class OperationTypeScreen extends React.Component {
     const token = await AuthService.getToken();
     if(token){
       item.id = item.name.toLowerCase().replace(/\s/g, '');
-      item.schema = JSON.stringify(item.schema);
       let newItem = await post("operation_type/", item, token);
       this.setState(prevState => ({
         items: [...prevState.items, newItem]
