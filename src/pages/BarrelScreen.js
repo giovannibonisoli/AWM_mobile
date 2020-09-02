@@ -73,7 +73,7 @@ class BarrelScreen extends React.Component {
     if(this.props.route.params.setID !== prevProps.route.params.setID){
       const token = await AuthService.getToken();
       if(token){
-        this.setState({items: await get(`barrel/set/${this.props.route.params.setID}/`, token)});
+        this.setState({items: await get(`barrel/set/${this.props.route.params.element.id}/`, token)});
       }
     }
   }
@@ -81,14 +81,15 @@ class BarrelScreen extends React.Component {
   async componentDidMount() {
     const token = await AuthService.getToken();
     if(token){
-      this.setState({items: await get(`barrel/set/${this.props.route.params.setID}/`, token)});
+      this.setState({items: await get(`barrel/set/${this.props.route.params.element.id}/`, token)});
     }
   }
 
   render () {
     return (
       <View style={{width: '100%', height: '100%'}}>
-        <Header name={`Batteria ${this.props.route.params.setID}`} openDrawer={this.props.navigation.openDrawer}/>
+        <Header name={`Batteria ${this.props.route.params.element.id}`}
+                openDrawer={this.props.navigation.openDrawer} />
         <DataList objectName="Barile"
                   items={this.state.items}
                   fields={this.fields}

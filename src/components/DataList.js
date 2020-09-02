@@ -9,7 +9,7 @@ class DataList extends React.Component {
   goToDetail = (action, item) => {
     let params = {}
 
-    if(!this.props.variable){
+    /*if(!this.props.variable){
       params.fields= this.props.fields;
       if(action === 'add'){
         params.item = undefined;
@@ -39,7 +39,21 @@ class DataList extends React.Component {
         params.title = `Modifica`;
       }
       this.props.navigate('operationDetail', params);
+    }*/
+    params.fields = this.props.fields;
+    params.variable = this.props.variable;
+    if(action === 'add'){
+      params.item = undefined;
+      params.action = this.props.addAction.bind(this);
+      params.title = `Aggiungi ${this.props.objectName}`;
     }
+    else{
+      params.item = item;
+      params.action = this.props.updateDeleteAction.bind(this);
+      params.details = this.props.details;
+      params.title = `Modifica ${this.props.objectName}`;
+    }
+    this.props.navigate('operationDetail', params);
   }
 
   render() {

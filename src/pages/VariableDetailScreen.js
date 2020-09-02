@@ -83,6 +83,7 @@ class VariableDetailScreen extends React.Component {
   componentDidUpdate(prevProps){
     if(this.props.route.params.item !== prevProps.route.params.item){
       this.initializeState();
+      console.log(this.state)
     }
   }
 
@@ -91,8 +92,6 @@ class VariableDetailScreen extends React.Component {
   }
 
   render(){
-    const item = this.props.route.params.item;
-    const fields = this.props.route.params.fields;
     return (<ScrollView style={styles.container}>
               <IconButton iconName="close" onPress={() => this.props.navigation.goBack()}/>
               <View style={{alignItems: 'center', flexDirection:'row', paddingTop: 20}}>
@@ -136,10 +135,7 @@ class VariableDetailScreen extends React.Component {
                               deleteAction={() => this.submitForm('DELETE')}
                               details={[this.props.route.params.details[1],
                                         () => this.props.navigation.navigate(this.props.route.params.details[0],
-                                                                              {
-                                                                                operationID: this.props.route.params.item.id,
-                                                                                operationName: this.props.route.params.item.name
-                                                                              }
+                                                                              {element: this.props.route.params.item}
                                                                             )]}/>) :
                 (<IconButton style={styles.footerView}
                               iconName="check"

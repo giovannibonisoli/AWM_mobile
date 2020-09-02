@@ -33,8 +33,8 @@ class OperationScreen extends React.Component {
     if(token){
       if(action === 'PUT'){
         let serializedItem = serializeFields(item, this.state.schema);
-        serializedItem.type = this.props.route.params.operationID;
-        let updatedItem = await put (`operation/${this.props.route.params.operationID}/${item.id}/`, serializedItem, token);
+        serializedItem.type = this.props.route.params.element.id;
+        let updatedItem = await put (`operation/${this.props.route.params.element.id}/${item.id}/`, serializedItem, token);
 
         const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
         const newArray = [
@@ -48,7 +48,7 @@ class OperationScreen extends React.Component {
           this.setState({ items: newArray });
       }
       else{
-        await del (`operation/${this.props.route.params.operationID}/${item.id}/`, token);
+        await del (`operation/${this.props.route.params.element.id}/${item.id}/`, token);
         const updatedItems = this.state.items.filter(el => el.id !== item.id);
         this.setState({ items: updatedItems });
       }
@@ -81,7 +81,7 @@ class OperationScreen extends React.Component {
                                 modifiable: true
                               }
                             ]});
-      let type = await get(`operation_type/${this.props.route.params.operationID}/`, token);
+      let type = await get(`operation_type/${this.props.route.params.element.id}/`, token);
       this.objectName = type.name;
       let schema = JSON.parse(type.schema);
       schema.forEach((item, i) => {
@@ -89,14 +89,14 @@ class OperationScreen extends React.Component {
       })
       this.setState({schema: [...this.state.schema, ...schema]});
 
-      let items = await get(`operation/${this.props.route.params.operationID}/`, token);
+      let items = await get(`operation/${this.props.route.params.element.id}/`, token);
       items = items.map(item => deserializeFields(item, "values"));
       this.setState({items: items});
     }
   }
 
   async componentDidUpdate(prevProps){
-    if(this.props.route.params.operationID !== prevProps.route.params.operationID){
+    if(this.props.route.params.element !== prevProps.route.params.element){
       this.setState({items: [], schema: []})
       this.changeSchema();
     }
@@ -109,8 +109,8 @@ class OperationScreen extends React.Component {
   render() {
     return (
       <View style={{width: '100%', height: '100%'}}>
-        <Header name={this.props.route.params.operationName} openDrawer={this.props.navigation.openDrawer}/>
-        <DataList objectName={this.props.route.params.operationName}
+        <Header name={this.props.route.params.element.name} openDrawer={this.props.navigation.openDrawer}/>
+        <DataList objectName={this.props.route.params.element.name}
                   items={this.state.items}
                   fields={this.state.schema}
                   navigate={this.props.navigation.navigate}
