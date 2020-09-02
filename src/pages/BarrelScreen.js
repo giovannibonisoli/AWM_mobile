@@ -36,8 +36,8 @@ class BarrelScreen extends React.Component {
   addItem = async (item, action) => {
     const token = await AuthService.getToken();
     if(token){
-      item.barrel_set = this.props.route.params.setID;
-      let newItem = await post("barrel_set/", item, token);
+      item.barrel_set = this.props.route.params.element.id;
+      let newItem = await post("barrel/", item, token);
       this.setState(prevState => ({
         items: [...prevState.items, newItem]
       }));
@@ -48,7 +48,7 @@ class BarrelScreen extends React.Component {
     const token = await AuthService.getToken();
     if(token){
       if(action === 'PUT'){
-        let updatedItem = await put(`barrel_set/${item.id}/`, item, token);
+        let updatedItem = await put(`barrel/${item.id}/`, item, token);
 
         const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
         const newArray = [
@@ -62,7 +62,7 @@ class BarrelScreen extends React.Component {
         this.setState({ items: newArray });
       }
       else{
-        await del (`barrel_set/${item.id}/`, token);
+        await del (`barrel/${item.id}/`, token);
         const updatedItems = this.state.items.filter(el => el.id !== item.id);
         this.setState({ items: updatedItems });
       }
