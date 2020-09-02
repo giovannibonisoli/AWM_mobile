@@ -27,6 +27,10 @@ class OperationTypeScreen extends React.Component {
             }
           ]
 
+  goToDetail = (item) => {
+    this.props.navigation.navigate("operation", {element: item})
+  }
+
   addItem = async (item, action) => {
     const token = await AuthService.getToken();
     if(token){
@@ -82,7 +86,8 @@ class OperationTypeScreen extends React.Component {
                   navigate={this.props.navigation.navigate}
                   addAction={this.addItem}
                   updateDeleteAction={this.updateDeleteItem}
-                  details={["operation", "Vedi tutti"]}
+                  detailLabel = "Vedi tutti"
+                  detailAction={this.goToDetail}
                   variable={true}/>
       </View>
     );

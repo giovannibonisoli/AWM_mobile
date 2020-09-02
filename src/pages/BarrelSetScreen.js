@@ -29,6 +29,10 @@ class BarrelSetScreen extends React.Component {
             }
           ]
 
+  goToDetail = (item) => {
+    this.props.navigation.navigate("barrel", {element: item})
+  }
+
   addItem = async (item, action) => {
     const token = await AuthService.getToken();
     if(token){
@@ -83,7 +87,8 @@ class BarrelSetScreen extends React.Component {
                   navigate={this.props.navigation.navigate}
                   addAction={this.addItem}
                   updateDeleteAction={this.updateDeleteItem}
-                  details={["barrel", "Vai ai Barili"]}
+                  detailLabel = "Vai ai Barili"
+                  detailAction={this.goToDetail}
                   />
       </View>
     );

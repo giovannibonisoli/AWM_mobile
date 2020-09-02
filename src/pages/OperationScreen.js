@@ -20,8 +20,8 @@ class OperationScreen extends React.Component {
     const token = await AuthService.getToken();
     if(token){
       let serializedItem = serializeFields(item, this.state.schema);
-      serializedItem.type = this.props.route.params.operationID;
-      let newItem = await post(`operation/${this.props.route.params.operationID}/`, serializedItem, token);
+      serializedItem.type = this.props.route.params.element.id;
+      let newItem = await post(`operation/${this.props.route.params.element.id}/`, serializedItem, token);
       this.setState(prevState => ({
         items: [...prevState.items, deserializeFields(newItem, "values")]
       }))

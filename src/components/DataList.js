@@ -7,50 +7,21 @@ import { request } from '../helpers/requests';
 class DataList extends React.Component {
 
   goToDetail = (action, item) => {
-    let params = {}
-
-    /*if(!this.props.variable){
-      params.fields= this.props.fields;
-      if(action === 'add'){
-        params.item = undefined;
-        params.action = this.props.addAction.bind(this);
-        params.title = `Aggiungi ${this.props.objectName}`;
-      }
-      else{
-        params.item = item;
-        params.action = this.props.updateDeleteAction.bind(this);
-        params.details = this.props.details;
-        params.title = `Modifica ${this.props.objectName}`;
-      }
-      this.props.navigate('detail', params);
+    console.log(this.props.variable);
+    let params = {
+      fields: this.props.fields,
+      variable: this.props.variable
     }
-    else{
-      params.fields = this.props.fields;
-      params.variable = true;
-      if(action === 'add'){
-        params.item = undefined;
-        params.action = this.props.addAction.bind(this);
-        params.title = "Aggiungi";
-      }
-      else{
-        params.item = item;
-        params.action = this.props.updateDeleteAction.bind(this);
-        params.details = this.props.details;
-        params.title = `Modifica`;
-      }
-      this.props.navigate('operationDetail', params);
-    }*/
-    params.fields = this.props.fields;
-    params.variable = this.props.variable;
+
     if(action === 'add'){
-      params.item = undefined;
       params.action = this.props.addAction.bind(this);
       params.title = `Aggiungi ${this.props.objectName}`;
     }
     else{
       params.item = item;
       params.action = this.props.updateDeleteAction.bind(this);
-      params.details = this.props.details;
+      params.detailLabel = this.props.detailLabel;
+      params.detailAction = this.props.detailAction ? this.props.detailAction.bind(this) : undefined
       params.title = `Modifica ${this.props.objectName}`;
     }
     this.props.navigate('operationDetail', params);

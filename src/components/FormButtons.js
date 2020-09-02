@@ -31,10 +31,10 @@ class FormButtons extends React.Component {
                           onPress={this.handleDeleteAction}/>
             </View>
             <View style={styles.footerView}>
-            {this.props.details &&
+            {this.props.detailLabel &&
               (<IconButton iconName="arrowright"
-                            label={this.props.details[0]}
-                            onPress={this.props.details[1]}/>
+                            label={this.props.detailLabel}
+                            onPress={this.props.detailAction}/>
               )}
             </View>
           </View>)

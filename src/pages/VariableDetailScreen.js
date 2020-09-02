@@ -62,10 +62,11 @@ class VariableDetailScreen extends React.Component {
   };
 
   initializeState = () => {
+    Object.keys(this.state).forEach(key => {
+      this.setState({[key]: undefined})
+    });
+
     if (this.props.route.params.item === undefined){
-      Object.keys(this.state).forEach(key => {
-        this.setState({[key]: undefined})
-      });
       if (this.props.route.params.variable){
         this.setState({schema: [{ field:"", name: "", type: ""}]})
       }
@@ -83,7 +84,6 @@ class VariableDetailScreen extends React.Component {
   componentDidUpdate(prevProps){
     if(this.props.route.params.item !== prevProps.route.params.item){
       this.initializeState();
-      console.log(this.state)
     }
   }
 
@@ -133,10 +133,8 @@ class VariableDetailScreen extends React.Component {
               {this.props.route.params.item ?
                 (<FormButtons updateAction={() => this.submitForm('PUT')}
                               deleteAction={() => this.submitForm('DELETE')}
-                              details={[this.props.route.params.details[1],
-                                        () => this.props.navigation.navigate(this.props.route.params.details[0],
-                                                                              {element: this.props.route.params.item}
-                                                                            )]}/>) :
+                              detailLabel={this.props.route.params.detailLabel}
+                              detailAction={() => this.props.route.params.detailAction(this.props.route.params.item)}/>) :
                 (<IconButton style={styles.footerView}
                               iconName="check"
                               label="Aggiungi"

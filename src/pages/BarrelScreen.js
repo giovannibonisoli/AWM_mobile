@@ -70,7 +70,7 @@ class BarrelScreen extends React.Component {
   }
 
   async componentDidUpdate(prevProps){
-    if(this.props.route.params.setID !== prevProps.route.params.setID){
+    if(this.props.route.params.element !== prevProps.route.params.element){
       const token = await AuthService.getToken();
       if(token){
         this.setState({items: await get(`barrel/set/${this.props.route.params.element.id}/`, token)});
