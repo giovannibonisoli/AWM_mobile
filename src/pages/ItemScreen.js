@@ -59,10 +59,10 @@ class ItemScreen extends React.Component {
     validation = validation && validate(this.props.route.params.fields, finalItem);
     if(validation){
       this.props.route.params.action(finalItem, action);
+      this.resetState();
       this.props.navigation.goBack();
     }
   };
-
 
   initializeState = () => {
     if (this.props.route.params.item === undefined){
@@ -71,12 +71,11 @@ class ItemScreen extends React.Component {
       else
         this.setState({schema: undefined})
     }
-    else{
+    else {
       Object.keys(this.props.route.params.item).forEach(key => {
         this.setState({[key]: this.props.route.params.item[key]});
       });
       if (this.props.route.params.variable){
-        this.setState({schema: JSON.parse(this.props.route.params.item.schema)});
       }
     }
   }
@@ -89,7 +88,6 @@ class ItemScreen extends React.Component {
 
   componentDidUpdate(prevProps){
     if(this.props.route.params.item !== prevProps.route.params.item){
-      console.log('inizializza');
       this.resetState();
       this.initializeState();
     }
@@ -100,6 +98,8 @@ class ItemScreen extends React.Component {
   }
 
   render(){
+    console.log(this.props.route.params.item);
+    const variable = (this.props.route.params.variable === true) && (this.state.schema !== undefined)
     return (<ScrollView style={styles.container}>
               <IconButton iconName="close" onPress={() => this.props.navigation.goBack()}/>
               <View style={{alignItems: 'center', flexDirection:'row', paddingTop: 20}}>
@@ -116,7 +116,7 @@ class ItemScreen extends React.Component {
                               disabled={this.props.route.params.item !== undefined && !field.modifiable}
                               labeled/>
               ))}
-              {this.state.schema && (
+              {variable && (
               <View>
                 {this.state.schema.map((field, idx) => (
                     <View key={idx} style={{flexDirection:"row", paddingTop: 20}}>
