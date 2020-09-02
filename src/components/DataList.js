@@ -25,7 +25,8 @@ class DataList extends React.Component {
       this.props.navigate('detail', params);
     }
     else{
-      params.fields= this.props.fields;
+      params.fields = this.props.fields;
+      params.variable = true;
       if(action === 'add'){
         params.item = undefined;
         params.action = this.props.addAction.bind(this);

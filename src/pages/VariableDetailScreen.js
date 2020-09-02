@@ -7,9 +7,7 @@ import IconButton from '../components/IconButton';
 import { validate, validateSchema } from '../helpers/FormValidation';
 
 class VariableDetailScreen extends React.Component {
-  state = {
-    schema: [{ field:"", name: "", type: ""}]
-  }
+  state = {}
 
   onChangeTextHandler = (field, text) => {
     this.setState({[field]: text});
@@ -51,39 +49,28 @@ class VariableDetailScreen extends React.Component {
   };
 
   submitForm = (action) => {
-    if(validate([{field: "name", name: "Name"}, {field: "description", name: "Descrizione"}], this.state)){
-      if(validateSchema(this.state.schema)){
-        this.props.route.params.action({
-          id : this.state.id,
-          name: this.state.name,
-          description: this.state.description,
-          schema: this.state.schema
-        }, action);
-        this.props.navigation.goBack();
-      }
+    let validation = false;
+    validation = validate(this.props.route.params.fields, this.state);
+
+    if(this.props.route.params.variable)
+      validation = validation && validateSchema(this.state.schema);
+
+    if(validation){
+      this.props.route.params.action(this.state, action);
+      this.props.navigation.goBack();
     }
   };
 
-  componentDidUpdate(prevProps){
-    if(this.props.route.params.item !== prevProps.route.params.item){
-      if (this.props.route.params.item === undefined){
-        Object.keys(this.state).forEach(key => {
-            this.setState({[key]: undefined})
-        });
-      }
-      else{
-        Object.keys(this.props.route.params.item).forEach(key => {
-          if(key === "schema")
-            this.setState({schema: JSON.parse(this.props.route.params.item.schema)})
-          else
-            this.setState({[key]: this.props.route.params.item[key]});
-        });
+  initializeState = () => {
+    if (this.props.route.params.item === undefined){
+      Object.keys(this.state).forEach(key => {
+        this.setState({[key]: undefined})
+      });
+      if (this.props.route.params.variable){
+        this.setState({schema: [{ field:"", name: "", type: ""}]})
       }
     }
-  }
-
-  componentDidMount(){
-    if(this.props.route.params.item){
+    else{
       Object.keys(this.props.route.params.item).forEach(key => {
         if(key === "schema")
           this.setState({schema: JSON.parse(this.props.route.params.item.schema)})
@@ -91,6 +78,16 @@ class VariableDetailScreen extends React.Component {
           this.setState({[key]: this.props.route.params.item[key]});
       });
     }
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props.route.params.item !== prevProps.route.params.item){
+      this.initializeState();
+    }
+  }
+
+  componentDidMount(){
+    this.initializeState();
   }
 
   render(){
