@@ -6,7 +6,7 @@ import CustomInput from '../components/CustomInput';
 import IconButton from '../components/IconButton';
 import { validate, validateSchema } from '../helpers/FormValidation';
 
-class VariableDetailScreen extends React.Component {
+class ItemScreen extends React.Component {
   state = {}
 
   onChangeTextHandler = (field, text) => {
@@ -169,4 +169,4 @@ const styles = {
 
 };
 
-export default VariableDetailScreen;
+export default ItemScreen;

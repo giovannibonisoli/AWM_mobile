@@ -7,13 +7,13 @@ import { request } from '../helpers/requests';
 class DataList extends React.Component {
 
   goToDetail = (action, item) => {
-    console.log(this.props.variable);
     let params = {
       fields: this.props.fields,
       variable: this.props.variable
     }
 
     if(action === 'add'){
+      params.item = undefined;
       params.action = this.props.addAction.bind(this);
       params.title = `Aggiungi ${this.props.objectName}`;
     }
@@ -24,7 +24,7 @@ class DataList extends React.Component {
       params.detailAction = this.props.detailAction ? this.props.detailAction.bind(this) : undefined
       params.title = `Modifica ${this.props.objectName}`;
     }
-    this.props.navigate('operationDetail', params);
+    this.props.navigate('item', params);
   }
 
   render() {

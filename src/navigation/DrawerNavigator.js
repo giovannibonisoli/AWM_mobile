@@ -7,8 +7,7 @@ import BarrelSetScreen from '../pages/BarrelSetScreen';
 import BarrelScreen from '../pages/BarrelScreen';
 import OperationTypeScreen from '../pages/OperationTypeScreen';
 import OperationScreen from '../pages/OperationScreen';
-import DetailScreen from '../pages/DetailScreen';
-import VariableDetailScreen from '../pages/VariableDetailScreen';
+import ItemScreen from '../pages/ItemScreen';
 import LogoutScreen from '../pages/LogoutScreen';
 import Sidebar from '../components/Sidebar';
 
@@ -44,15 +43,9 @@ class DrawerNavigator extends React.Component {
           show: false
         },
         {
-          name: "detail",
+          name: "item",
           title: "",
-          component: DetailScreen,
-          show: false
-        },
-        {
-          name: "operationDetail",
-          title: "",
-          component: VariableDetailScreen,
+          component: ItemScreen,
           show: false
         },
         {
