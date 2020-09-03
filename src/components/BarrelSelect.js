@@ -34,27 +34,21 @@ class BarrelSelect extends React.Component {
         sets: await get("barrel_set/", token),
         barrels: await get("barrel/", token)
       });
+      this.setState({
+                      selectedSet: this.state.barrels[0].barrel_set,
+                      selectedBarrel: this.state.barrels[0].id
+                    });
     }
   }
 
   componentDidUpdate(prevProps) {
-    if(this.state.barrels.length !== 0){
-      if(this.props.value){
-        if(this.props.value !== prevProps.value || this.state.selectedBarrel === null){
-          const item = this.state.barrels.filter(barrel => barrel.id === this.props.value)[0];
-          this.setState({
-                          selectedSet: item.barrel_set,
-                          selectedBarrel: item.id
-                        });
-        }
-      }
-      else{
-        if(this.state.selectedSet == null && this.state.selectedBarrel){
-          this.setState({
-                          selectedSet: this.state.barrels[0].barrel_set,
-                          selectedBarrel: this.state.barrels[0].id
-                        });
-        }
+    if(this.props.value && this.state.barrels.length !== 0){
+      if(this.props.value !== prevProps.value){
+        const item = this.state.barrels.filter(barrel => barrel.id === this.props.value)[0];
+        this.setState({
+                        selectedSet: item.barrel_set,
+                        selectedBarrel: item.id
+                      });
       }
     }
   }
@@ -72,7 +66,7 @@ class BarrelSelect extends React.Component {
           <View style={{...styles.inputView, backgroundColor: 'white'}}>
             <Picker style={{color:"#000", fontSize: 17, padding: 34}}
                     selectedValue={this.state.selectedSet}
-                    onValueChange={(itemValue, itemIndex) => this.setState({selectedSet: itemValue})}>
+                    onValueChange={(value, index) => this.setState({selectedSet: value})}>
                     {this.state.sets.map((set, i) => (<Picker.Item key={i} label={set.id.toString()} value={set.id} />))}
             </Picker>
           </View>
@@ -80,7 +74,7 @@ class BarrelSelect extends React.Component {
           <View style={{...styles.inputView, backgroundColor: 'white'}}>
             <Picker style={{color:"#000", fontSize: 17, padding: 34}}
                     selectedValue={this.state.selectedBarrel}
-                    onValueChange={(itemValue, itemIndex) => this.setState({selectedBarrel: itemValue})}>
+                    onValueChange={(value, index) => this.setState({selectedBarrel: value})}>
                     {this.state.barrels.filter(barrel => barrel.barrel_set === this.state.selectedSet)
                     .map((barrel, i) => (<Picker.Item key={i} label={barrel.id.toString()} value={barrel.id} />))}
              </Picker>
