@@ -49,17 +49,17 @@ class ItemScreen extends React.Component {
   };
 
   submitForm = (action) => {
-    let finalItem = this.state;
     let validation = true;
 
     if(this.props.route.params.variable){
-      validation = validation && validateSchema(finalItem.schema);
+      validation = validation && validateSchema(this.state.schema);
     }
 
-    validation = validation && validate(this.props.route.params.fields, finalItem);
+    let valfields = this.props.route.params.fields.filter(field => field.notModifiable !== true);
+
+    validation = validation && validate(valfields, this.state);
     if(validation){
-      this.props.route.params.action(finalItem, action);
-      this.resetState();
+      this.props.route.params.action(Object.assign({}, this.state), action);
       this.props.navigation.goBack();
     }
   };
@@ -98,7 +98,6 @@ class ItemScreen extends React.Component {
   }
 
   render(){
-    console.log(this.props.route.params.item);
     const variable = (this.props.route.params.variable === true) && (this.state.schema !== undefined)
     return (<ScrollView style={styles.container}>
               <IconButton iconName="close" onPress={() => this.props.navigation.goBack()}/>
@@ -107,15 +106,17 @@ class ItemScreen extends React.Component {
                   {`${this.props.route.params.title} `}
                 </Text>
               </View>
-              {this.props.route.params.fields.map((field, i) => (
-                <CustomInput key={i}
-                              style={{paddingTop: 20}}
-                              field={field}
-                              value={`${this.state[field.field] ? this.state[field.field] : ''}`}
-                              onChangeText={this.onChangeTextHandler}
-                              disabled={this.props.route.params.item !== undefined && !field.modifiable}
-                              labeled/>
-              ))}
+              {this.props.route.params.fields.map((field, i) => {
+                if(this.props.route.params.item !== undefined || field.type !== "auto")
+                  return (
+                    <CustomInput key={i}
+                                  style={{paddingTop: 20}}
+                                  field={field}
+                                  value={`${this.state[field.field] ? this.state[field.field] : ''}`}
+                                  onChangeText={this.onChangeTextHandler}
+                                  disabled={this.props.route.params.item !== undefined && field.notModifiable}
+                                  labeled/>)
+              })}
               {variable && (
               <View>
                 {this.state.schema.map((field, idx) => (

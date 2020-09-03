@@ -16,14 +16,12 @@ class OperationTypeScreen extends React.Component {
             {
               field: 'name',
               name: 'Nome',
-              type: 'text',
-              modifiable: false
+              type: 'default'
             },
             {
               field: 'description',
               name: 'Descrizione',
-              type: 'text',
-              modifiable: true
+              type: 'default'
             }
           ]
 
@@ -31,14 +29,12 @@ class OperationTypeScreen extends React.Component {
     this.props.navigation.navigate("operation", {element: item})
   }
 
-  addItem = async (item, action) => {
+  addItem = async (item) => {
     const token = await AuthService.getToken();
     if(token){
       item.id = item.name.toLowerCase().replace(/\s/g, '');
-      item.schema = JSON.stringify(item.schema);
 
       let newItem = await post("operation_type/", item, token);
-      newItem.schema = JSON.parse(newItem.schema);
       this.setState(prevState => ({
         items: [...prevState.items, newItem]
       }));
@@ -49,9 +45,7 @@ class OperationTypeScreen extends React.Component {
     const token = await AuthService.getToken();
     if(token){
       if(action === 'PUT'){
-        item.schema = JSON.stringify(item.schema);
         let updatedItem = await put (`operation_type/${item.id}/`, item, token);
-        updatedItem.schema = JSON.parse(updatedItem.schema);
         const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
         const newArray = [
           // destructure all items from beginning to the indexed item
@@ -71,15 +65,10 @@ class OperationTypeScreen extends React.Component {
     }
   }
 
-  async componentDidMount() {
+  async componentDidMount(){
     const token = await AuthService.getToken();
     if(token){
-      let items = await get("operation_type/", token);
-      items = items.map(item => {
-        item.schema = JSON.parse(item.schema);
-        return item;
-      });
-      this.setState({items: items});
+      this.setState({items: await get("operation_type/", token)});
     }
   }
 
