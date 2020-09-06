@@ -3,6 +3,7 @@ import { Image } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import ProfileScreen from '../pages/ProfileScreen';
 import BarrelSetScreen from '../pages/BarrelSetScreen';
 import BarrelScreen from '../pages/BarrelScreen';
 import OperationTypeScreen from '../pages/OperationTypeScreen';
@@ -20,48 +21,54 @@ class DrawerNavigator extends React.Component {
           name: "barrelSet",
           title: "Batterie e Barili",
           component: BarrelSetScreen,
-          show: true,
+          sidebar: true,
           icon: <Image source={require("../static/barrel.png")} style={{width: '10%', height: '56%'}}/>
         },
         {
           name: "barrel",
           title: "Barili",
           component: BarrelScreen,
-          show: false
+          sidebar: false
         },
         {
           name: "operationType",
           title: "Tipi di Operazione",
           component: OperationTypeScreen,
-          show: true,
+          sidebar: true,
           icon: <Image source={require("../static/operation.png")} style={{width: '10%', height: '56%'}}/>
         },
         {
           name: "operation",
           title: "",
           component: OperationScreen,
-          show: false
+          sidebar: false
         },
         {
           name: "item",
           title: "",
           component: ItemScreen,
-          show: false
+          sidebar: false
         },
         {
           name: "logout",
           title: "Esci",
           component: LogoutScreen,
-          show: true,
+          sidebar: true,
           icon: <MaterialCommunityIcons name="logout" size={24} color="black" />
+        },
+        {
+          name: "profile",
+          title: "Profilo",
+          component: ProfileScreen,
+          sidebar: false
         }
     ]
   }
   render(){
     return (
-      <Drawer.Navigator drawerContent={props => (<Sidebar {...props} username={this.props.route.params.username}
+      <Drawer.Navigator drawerContent={props => (<Sidebar {...props} user={this.props.route.params.user}
                                                                     routes={this.state.routes.filter(route => {
-                                                                              return route.show === true;
+                                                                              return route.sidebar === true;
                                                                             })} />) }>
         {this.state.routes.map((route, i) => (
           <Drawer.Screen

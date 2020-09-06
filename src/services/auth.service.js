@@ -56,13 +56,11 @@ class AuthService {
   }
 
   getCurrentUser = async () => {
-    if(this.isLoggedIn()){
-      try{
-        return JSON.parse(await AsyncStorage.getItem('user'));
-      }
-      catch(e){
-        console.error(e)
-      }
+    try{
+      return JSON.parse(await AsyncStorage.getItem('user'));
+    }
+    catch(e){
+      console.error(e)
     }
     return false;
   }

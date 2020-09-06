@@ -40,8 +40,11 @@ class LoginScreen extends React.Component {
     const validation = validate(this.fields, this.state);
     if (validation){
       AuthService.login(this.state.username, this.state.password).then(res => {
-        if (res === "login successful")
-          this.props.navigation.navigate('Drawer', { username: this.state.username });
+        if (res === "login successful"){
+          AuthService.getCurrentUser().then(user => {
+            this.props.navigation.navigate('Drawer', {user: user});
+          })
+        }
         else
           this.alertError("Login Fallito", "Non risulta nessun utente con queste credenziali");
         })

@@ -6,6 +6,8 @@ import { StatusBar } from 'react-native';
 import LoginScreen from '../pages/LoginScreen';
 import DrawerNavigator from './DrawerNavigator';
 
+import AuthService from '../services/auth.service';
+
 const Stack = createStackNavigator();
 
 class RootNavigator extends React.Component {
@@ -21,10 +23,12 @@ class RootNavigator extends React.Component {
               title: 'Login'
             }}
           />
-          <Stack.Screen
-            name="Drawer"
-            component={DrawerNavigator}
-          />
+          {AuthService.isLoggedIn() &&
+            (<Stack.Screen
+              name="Drawer"
+              component={DrawerNavigator}
+            />)
+          }
         </Stack.Navigator>
       </NavigationContainer>
     );

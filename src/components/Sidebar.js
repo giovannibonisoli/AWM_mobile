@@ -2,10 +2,12 @@ import React from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import AuthService from '../services/auth.service';
+
 const Item = ({ item, navigate }) => {
 
   return (
-    <TouchableOpacity style={styles.listItem} onPress={()=>navigate(item.name)}>
+    <TouchableOpacity style={styles.listItem} onPress={()=> navigate(item.name)}>
       {item.icon}
       <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
@@ -17,10 +19,13 @@ class Sidebar extends React.Component {
   render () {
     return (
       <View>
-        <View style={{alignItems: 'center'}}>
+        <TouchableOpacity style={{alignItems: 'center'}}
+                          onPress={() => this.props.navigation.navigate('profile', {user: this.props.user})}>
           <Image source={require("../static/user.png")} style={styles.profileImg}/>
-          <Text style={{fontWeight:"bold", fontSize: 16, marginTop: 10}}>{this.props.username}</Text>
-        </View>
+          <Text style={{fontWeight:"bold", fontSize: 16, marginTop: 10}}>
+            {this.props.user.username}
+          </Text>
+        </TouchableOpacity>
         <View style={styles.sidebarDivider}></View>
 
         <FlatList
