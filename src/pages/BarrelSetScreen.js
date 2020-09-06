@@ -28,8 +28,8 @@ class BarrelSetScreen extends React.Component {
             }
           ]
 
-  goToDetail = (item) => {
-    this.props.navigation.navigate("barrel", {element: item})
+  goToBarrels = (item) => {
+    this.props.navigation.navigate("barrel", {setID: item.id})
   }
 
   addItem = (item, action) => {
@@ -42,7 +42,7 @@ class BarrelSetScreen extends React.Component {
     })
   }
 
-  updateDeleteItem = async (item, action) => {
+  updateDeleteItem = (item, action) => {
     AuthService.getToken().then(token => {
       if(action === 'PUT'){
         put(`barrel_set/${item.id}/`, item, token).then(updatedItem => {
@@ -80,7 +80,7 @@ class BarrelSetScreen extends React.Component {
                   addAction={this.addItem}
                   updateDeleteAction={this.updateDeleteItem}
                   detailLabel = "Vai ai Barili"
-                  detailAction={this.goToDetail}
+                  detailAction={this.goToBarrels}
                   />
       </View>
     );

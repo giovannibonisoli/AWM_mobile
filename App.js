@@ -5,7 +5,7 @@ import { YellowBox } from 'react-native';
 import RootNavigator from './src/navigation/RootNavigator';
 
 YellowBox.ignoreWarnings([
-  'Non-serializable values were found in the navigation state',
+  //'Non-serializable values were found in the navigation state',
   'Remote debugger'
 ]);
 

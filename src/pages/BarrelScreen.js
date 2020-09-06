@@ -31,62 +31,59 @@ class BarrelScreen extends React.Component {
             }
           ]
 
-  addItem = async (item, action) => {
-    const token = await AuthService.getToken();
-    if(token){
-      item.barrel_set = this.props.route.params.element.id;
-      let newItem = await post("barrel/", item, token);
-      this.setState(prevState => ({
-        items: [...prevState.items, newItem]
-      }));
-    }
+  addItem = (item, action) => {
+    AuthService.getToken().then(token => {
+      item.barrel_set = this.props.route.params.setID;
+      post("barrel/", item, token).then(
+        this.setState(prevState => ({
+          items: [...prevState.items, newItem]
+        }))
+      )
+    })
   }
 
-  updateDeleteItem = async (item, action) => {
-    const token = await AuthService.getToken();
-    if(token){
+  updateDeleteItem = (item, action) => {
+    AuthService.getToken().then(token => {
       if(action === 'PUT'){
-        let updatedItem = await put(`barrel/${item.id}/`, item, token);
-
-        const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
-        const newArray = [
-          // destructure all items from beginning to the indexed item
-          ...this.state.items.slice(0, itemIndex),
-          // add the updated item to the array
-          updatedItem,
-          // add the rest of the items to the array from the index after the replaced item
-          ...this.state.items.slice(itemIndex + 1)
-        ]
-        this.setState({ items: newArray });
+        put(`barrel/${item.id}/`, item, token).then(updatedItem => {
+          const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+          const newArray = [
+            ...this.state.items.slice(0, itemIndex),
+            updatedItem,
+            ...this.state.items.slice(itemIndex + 1)
+          ]
+          this.setState({ items: newArray });
+        })
       }
       else{
-        await del (`barrel/${item.id}/`, token);
+        del(`barrel/${item.id}/`, token);
         const updatedItems = this.state.items.filter(el => el.id !== item.id);
         this.setState({ items: updatedItems });
       }
-    }
+    })
   }
 
-  async componentDidUpdate(prevProps){
-    if(this.props.route.params.element !== prevProps.route.params.element){
-      const token = await AuthService.getToken();
-      if(token){
-        this.setState({items: await get(`barrel/set/${this.props.route.params.element.id}/`, token)});
-      }
-    }
+  getBarrels = () => {
+    AuthService.getToken().then(token => {
+      get(`barrel/set/${this.props.route.params.setID}/`, token).then(items => {
+        this.setState({items: items});
+      })
+    })
   }
 
-  async componentDidMount() {
-    const token = await AuthService.getToken();
-    if(token){
-      this.setState({items: await get(`barrel/set/${this.props.route.params.element.id}/`, token)});
-    }
+  componentDidUpdate(prevProps){
+    if(this.props.route.params.setID !== prevProps.route.params.setID)
+      this.getBarrels();
+  }
+
+  componentDidMount() {
+    this.getBarrels();
   }
 
   render () {
     return (
       <View style={{width: '100%', height: '100%'}}>
-        <Header name={`Batteria ${this.props.route.params.element.id}`}
+        <Header name={`Batteria ${this.props.route.params.setID}`}
                 openDrawer={this.props.navigation.openDrawer} />
         <DataList objectName="Barile"
                   items={this.state.items}
