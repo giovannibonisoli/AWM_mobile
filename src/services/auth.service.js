@@ -3,55 +3,56 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { get, post, put, del } from '../helpers/requests';
 
 class AuthService {
-  login = async (username, password) => {
-    return fetch("http://10.0.2.2:8000/api/token/", {
-       method: 'POST',
-       headers: {
-                  'Content-Type': 'application/json',
-                  Accept: 'application/json',
-                },
-       body: JSON.stringify({username, password})
-    })
-    .then(res => res.json())
-    .then(data => {
-      if(data.access && data.refresh){
-        this.storeUser(username, data.access, data.refresh);
-        return "login successful";
-      }
-      return data.detail;
-    })
-    .catch(err => console.error(err));
-  }
 
-  storeUser = async (username, access, refresh) => {
-    try {
-      await AsyncStorage.setItem('user', JSON.stringify({
-        name: username,
-        token: {
-                  access: access,
-                  refresh: refresh
-                },
-        date: new Date()
-      }));
-    } catch (e) {
-      console.error(e);
-    }
-}
+  login = async (username, password) => {
+    return post("token/", {
+      username: username,
+      password: password
+    }).then(async userInfo => {
+
+      if(userInfo.detail === "No active account found with the given credentials")
+        return false;
+
+      try {
+        await AsyncStorage.setItem('user', JSON.stringify({
+          username: username,
+          first_name: userInfo.first_name,
+          last_name: userInfo.last_name,
+          email: userInfo.email
+        }));
+
+        await AsyncStorage.setItem('token', JSON.stringify({
+          access: userInfo.access,
+          refresh: userInfo.refresh,
+          date: new Date()
+        }));
+      } catch (e) {
+        console.log(e);
+        return false
+      }
+      return "login successful";
+    })
+  }
 
   logout = async () => {
     try {
       await AsyncStorage.removeItem('user');
+      await AsyncStorage.removeItem('token');
     }
     catch(e) {
-      console.error(e);
+      console.log(e);
     }
   }
 
   isLoggedIn = async () => {
-    if(await AsyncStorage.getItem('user')){
-      return true;
+    try {
+      if(await AsyncStorage.removeItem('user'))
+        return true;
+      return false;
     }
-    return false;
+    catch(e) {
+      console.log(e);
+    }
   }
 
   getCurrentUser = async () => {
@@ -60,42 +61,41 @@ class AuthService {
         return JSON.parse(await AsyncStorage.getItem('user'));
       }
       catch(e){
-        console.error(e);
+        console.error(e)
       }
     }
     return false;
   }
 
   checkToken = async () => {
-    const user = await this.getCurrentUser();
+    const token = JSON.parse(await AsyncStorage.getItem('token'));
 
-    const startDate = Date.parse(user.date);
+    const startDate = Date.parse(token.date);
     const endDate = new Date();
     if ((endDate - startDate) / 1000 >=  290){
-      return fetch("http://10.0.2.2:8000/api/token/refresh/", {
-    	   method: 'POST',
-      	 headers: {
-        		        'Content-Type': 'application/json',
-      		          Accept: 'application/json',
-      	          },
-    		 body: JSON.stringify({refresh: user.token.refresh})
-    	})
-    	.then(res => {
-        if (!res.ok) {
-    		    throw new Error(`Error with status ${res.status}`);
-    		}
-    		return res.json();
-    	})
-      .then(res => {
-        this.storeUser(user.name, res.access, user.token.refresh);
-      });
+      return post("token/refresh/", {refresh: token.refresh})
+      .then(async newToken => {
+        token.access = newToken.access;
+        try {
+          await AsyncStorage.setItem('token', JSON.stringify(token));
+        }
+        catch (e){
+          console.log(e);
+        }
+      })
     }
   }
 
   getToken = async () => {
     await this.checkToken();
-    const user = await this.getCurrentUser();
-    return user.token.access;
+    try {
+      const token = JSON.parse(await AsyncStorage.getItem('token'));
+      return token.access;
+    }
+    catch(e){
+      console.log(e)
+      return false;
+    }
   }
 }
 
