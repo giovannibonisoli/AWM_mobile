@@ -25,51 +25,48 @@ class OperationTypeScreen extends React.Component {
             }
           ]
 
-  goToDetail = (item) => {
-    this.props.navigation.navigate("operation", {element: item})
+  goToOperation = (item) => {
+    this.props.navigation.navigate("operation", {operation: item})
   }
 
-  addItem = async (item) => {
-    const token = await AuthService.getToken();
-    if(token){
+  addItem = (item) => {
+    AuthService.getToken().then(token => {
       item.id = item.name.toLowerCase().replace(/\s/g, '');
-
-      let newItem = await post("operation_type/", item, token);
-      this.setState(prevState => ({
-        items: [...prevState.items, newItem]
-      }));
-    }
+      post("operation_type/", item, token).then(newItem => {
+        this.setState(prevState => ({
+          items: [...prevState.items, newItem]
+        }));
+      })
+    })
   }
 
-  updateDeleteItem = async (item, action) => {
-    const token = await AuthService.getToken();
-    if(token){
+  updateDeleteItem = (item, action) => {
+    AuthService.getToken().then(token => {
       if(action === 'PUT'){
-        let updatedItem = await put (`operation_type/${item.id}/`, item, token);
-        const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
-        const newArray = [
-          // destructure all items from beginning to the indexed item
-          ...this.state.items.slice(0, itemIndex),
-          // add the updated item to the array
-          updatedItem,
-          // add the rest of the items to the array from the index after the replaced item
-          ...this.state.items.slice(itemIndex + 1)
-        ]
-        this.setState({ items: newArray });
+        put(`operation_type/${item.id}/`, item, token).then(updatedItem => {
+          const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+          const newArray = [
+            ...this.state.items.slice(0, itemIndex),
+            updatedItem,
+            ...this.state.items.slice(itemIndex + 1)
+          ]
+          this.setState({ items: newArray });
+        });
       }
       else{
-        await del (`operation_type/${item.id}/`, token);
+        del(`operation_type/${item.id}/`, token);
         const updatedItems = this.state.items.filter(el => el.id !== item.id);
         this.setState({ items: updatedItems });
       }
-    }
+    })
   }
 
-  async componentDidMount(){
-    const token = await AuthService.getToken();
-    if(token){
-      this.setState({items: await get("operation_type/", token)});
-    }
+  componentDidMount(){
+    AuthService.getToken().then(token => {
+      get("operation_type/", token).then(items => {
+        this.setState({items: items});
+      })
+    });
   }
 
   render () {
@@ -83,7 +80,7 @@ class OperationTypeScreen extends React.Component {
                   addAction={this.addItem}
                   updateDeleteAction={this.updateDeleteItem}
                   detailLabel = "Vedi tutti"
-                  detailAction={this.goToDetail}
+                  detailAction={this.goToOperation}
                   variable={true}/>
       </View>
     );
