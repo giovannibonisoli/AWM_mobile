@@ -44,33 +44,28 @@ class BarrelSetScreen extends React.Component {
 
   updateDeleteItem = async (item, action) => {
     AuthService.getToken().then(token => {
-      if(token){
-        if(action === 'PUT'){
-          put(`barrel_set/${item.id}/`, item, token).then(updatedItem => {
-            const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
-            const newArray = [
-              ...this.state.items.slice(0, itemIndex),
-              updatedItem,
-              ...this.state.items.slice(itemIndex + 1)
-            ]
-            this.setState({ items: newArray });
-          })
-        }
-        else{
-          del(`barrel_set/${item.id}/`, token);
-          const updatedItems = this.state.items.filter(el => el.id !== item.id);
-          this.setState({ items: updatedItems });
-        }
+      if(action === 'PUT'){
+        put(`barrel_set/${item.id}/`, item, token).then(updatedItem => {
+          const itemIndex = this.state.items.findIndex(data => data.id === updatedItem.id);
+          const newArray = [
+            ...this.state.items.slice(0, itemIndex),
+            updatedItem,
+            ...this.state.items.slice(itemIndex + 1)
+          ]
+          this.setState({ items: newArray });
+        })
+      }
+      else{
+        del(`barrel_set/${item.id}/`, token);
+        const updatedItems = this.state.items.filter(el => el.id !== item.id);
+        this.setState({ items: updatedItems });
       }
     })
   }
 
   componentDidMount() {
     AuthService.getToken().then(token => {
-      get("barrel_set/", token).then(items => {
-        if(token)
-          this.setState({items: items});
-      })
+      get("barrel_set/", token).then(items => this.setState({items: items}))
     })
   }
 
